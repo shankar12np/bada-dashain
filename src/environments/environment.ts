@@ -1,3 +1,5 @@
+import type { Environment } from './environment.model';
+
 /**
  * Production environment.
  *
@@ -5,7 +7,8 @@
  * Access is protected by Security Rules (+ App Check, recommended).
  * Copy these values from Firebase Console → Project settings → Your apps.
  */
-export const environment = {
+
+export const environment: Environment = {
   production: true,
   /** Public origin used for share links and Open Graph URLs. */
   siteUrl: 'https://your-firebase-project-id.web.app',
@@ -23,4 +26,3 @@ export const environment = {
   useEmulators: false,
 };
 
-export type Environment = typeof environment;

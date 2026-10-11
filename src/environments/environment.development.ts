@@ -1,4 +1,4 @@
-import type { Environment } from './environment';
+import type { Environment } from './environment.model';
 
 /**
  * Development environment — used by `ng serve`.
