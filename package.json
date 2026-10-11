@@ -2,14 +2,18 @@
   "name": "tika",
   "version": "0.0.0",
   "scripts": {
-    "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "ng": "ng",
+    "emulators": "firebase emulators:start --project demo-tika",
+    "deploy:rules": "firebase deploy --only firestore,storage",
+    "deploy:web": "ng build && firebase deploy --only hosting",
+    "deploy:functions": "npm --prefix functions install && firebase deploy --only functions",
+    "firebase": "firebase"
   },
   "private": true,
-  "packageManager": "npm@10.9.4",
   "dependencies": {
     "@angular/common": "^22.2.0",
     "@angular/compiler": "^22.2.0",
@@ -33,11 +37,15 @@
     "@angular/cli": "^22.2.2",
     "@angular/compiler-cli": "^22.2.0",
     "@tailwindcss/postcss": "^4.3.3",
+    "firebase-tools": "^15.33.0",
     "jsdom": "^30.0.0",
     "postcss": "^8.5.29",
     "prettier": "^3.8.1",
     "tailwindcss": "^4.3.3",
     "typescript": "~6.0.2",
     "vitest": "^5.0.0"
+  },
+  "engines": {
+    "node": "^22.22.3 || >=24.15.0"
   }
 }

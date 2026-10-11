@@ -3,19 +3,18 @@
 Dashain & Bijaya Dashami greeting cards with your own photo — Angular 22 + Firebase PWA.
 See **ARCHITECTURE.md** for decisions, data model, rules and the roadmap.
 
-## Requirements
-* Node **22.22.3+ or 24.15+** (Angular CLI 22 requirement)
-* Firebase CLI: `npm i -g firebase-tools`
-* Java 21 (only for the Firestore/Storage emulators)
+## Setup (everything stays local to this project)
+* **Node 24** is pinned in `.node-version` / `.nvmrc`. Use [fnm](https://github.com/Schniz/fnm) to switch automatically.
+  `.npmrc` has `engine-strict=true`, so `npm install` refuses to run on a wrong Node version.
+* **Angular CLI and Firebase CLI are dev dependencies** — no global installs. Run them via npm scripts or `npx ng …` / `npx firebase …`.
+* Java 21 is needed only for the Firestore/Storage emulators.
 
-## Run locally (no real Firebase needed)
 ```bash
-npm install
-firebase emulators:start      # terminal 1 — auth, firestore, storage, functions
-npm start                     # terminal 2 — http://localhost:4200
+fnm use            # picks Node 24 from .node-version (installs it if missing with: fnm install)
+npm ci             # exact versions from package-lock.json
+npm run emulators  # terminal 1 — local auth/firestore/storage (http://localhost:4000 UI)
+npm start          # terminal 2 — http://localhost:4200
 ```
-`ng serve` uses `environment.development.ts`, which points at the emulators
-with the `demo-tika` project id.
 
 ## First deploy
 1. Create a Firebase project; enable **Authentication → Google + Anonymous**, **Firestore**, **Storage**.
@@ -23,11 +22,12 @@ with the `demo-tika` project id.
 3. Add your domain to Auth → Settings → Authorized domains.
 4. Deploy:
    ```bash
-   npm run build
-   firebase deploy --only firestore,storage,hosting
+   npx firebase login
+   npm run deploy:rules
+   npm run deploy:web
    gsutil cors set cors.json gs://<your-bucket>      # enables "Share image" / download
    ```
-5. (Blaze plan) `cd functions && npm install && cd .. && firebase deploy --only functions`
+5. (Blaze plan) `npm run deploy:functions`
    — rich link previews on WhatsApp/Facebook, remix counts and auto-moderation.
    Without functions, also remove the `/c/**` rewrite from `firebase.json`.
 
