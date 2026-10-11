@@ -18,7 +18,7 @@
     </div>
   }
 
-  <div class="grid gap-6 md:grid-cols-[minmax(320px,440px)_minmax(0,1fr)] md:items-start">
+  <div class="grid grid-cols-[minmax(0,1fr)] gap-6 md:grid-cols-[minmax(320px,440px)_minmax(0,1fr)] md:items-start">
     <!-- ── Preview ─────────────────────────────────────────────── -->
     <div class="md:sticky md:top-24">
       <!-- On phones, cap the height so controls stay reachable. -->
@@ -58,7 +58,7 @@
     </div>
 
     <!-- ── Controls ────────────────────────────────────────────── -->
-    <div class="panel p-4 md:p-6">
+    <div class="panel min-w-0 p-4 md:p-6">
       <div class="mb-5 grid grid-cols-3 gap-1 rounded-full bg-cream p-1" role="tablist">
         @for (t of ['photo', 'design', 'text']; track t) {
           <button type="button" role="tab" [attr.aria-selected]="tab() === t" (click)="tab.set($any(t))"
