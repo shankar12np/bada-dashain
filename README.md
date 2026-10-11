@@ -7,7 +7,7 @@ See **ARCHITECTURE.md** for decisions, data model, rules and the roadmap.
 * **Node 24** is pinned in `.node-version` / `.nvmrc`. Use [fnm](https://github.com/Schniz/fnm) to switch automatically.
   `.npmrc` has `engine-strict=true`, so `npm install` refuses to run on a wrong Node version.
 * **Angular CLI and Firebase CLI are dev dependencies** — no global installs. Run them via npm scripts or `npx ng …` / `npx firebase …`.
-* Java 21 is needed only for the Firestore/Storage emulators.
+* Java 21 (`brew install openjdk@21`) is used only by `npm run emulators` — your Mac's default Java is left untouched.
 
 ```bash
 fnm use            # picks Node 24 from .node-version (installs it if missing with: fnm install)
