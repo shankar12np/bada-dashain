@@ -1,0 +1,172 @@
+<section class="mx-auto max-w-6xl px-4 pb-28 pt-4 md:pb-12 md:pt-8">
+  <!-- Title row -->
+  <div class="mb-4 flex flex-wrap items-center gap-x-4 gap-y-2">
+    <a routerLink="/create" class="text-sm text-ink-soft hover:text-sindoor">← {{ i18n.t('common.back') }}</a>
+    <h1 class="heading text-2xl md:text-3xl" [style.color]="dayInfo().accent">
+      {{ i18n.pick(dayInfo().name) }}
+      <span class="font-sans text-base font-normal text-ink-soft">· {{ i18n.t('editor.title') }}</span>
+    </h1>
+  </div>
+
+  @if (remixSource(); as src) {
+    <div class="mb-4 flex items-center gap-3 rounded-xl border border-gold/50 bg-cream p-3">
+      <img [src]="src.thumbUrl" alt="" class="h-14 w-11 rounded-md object-cover" />
+      <p class="text-sm">
+        <span class="font-medium">{{ i18n.t('editor.remixing') }}</span>
+        @if (src.ownerName) { <span class="text-ink-soft"> · {{ src.ownerName }}</span> }
+      </p>
+    </div>
+  }
+
+  <div class="grid gap-6 md:grid-cols-[minmax(320px,440px)_minmax(0,1fr)] md:items-start">
+    <!-- ── Preview ─────────────────────────────────────────────── -->
+    <div class="md:sticky md:top-24">
+      <!-- On phones, cap the height so controls stay reachable. -->
+      <div #stageWrap class="relative mx-auto w-full overflow-hidden rounded-xl bg-cream shadow-card"
+           style="max-width: min(100%, calc(56dvh * 0.8)); aspect-ratio: 4 / 5">
+        <div #stageHost class="absolute inset-0"></div>
+        @if (!sceneReady() || loadingPhoto()) {
+          <div class="absolute inset-0 grid place-items-center bg-cream/70">
+            <span class="h-10 w-10 animate-spin rounded-full border-4 border-gold border-t-sindoor" role="status"
+                  [attr.aria-label]="i18n.t('common.loading')"></span>
+          </div>
+        }
+      </div>
+      <p class="mt-2 text-center text-xs text-ink-soft">{{ i18n.t('editor.dragHint') }}</p>
+
+      <div class="mt-4 grid grid-cols-2 gap-3">
+        <button type="button" class="btn-ghost" (click)="download()" [disabled]="!sceneReady()">
+          ⬇ {{ i18n.t('editor.download') }}
+        </button>
+        <button type="button" class="btn-primary" (click)="save()" [disabled]="!sceneReady() || saving()">
+          @if (saving()) {
+            <span class="h-4 w-4 animate-spin rounded-full border-2 border-cream border-t-transparent"></span>
+            {{ i18n.t('editor.saving') }}
+          } @else {
+            {{ i18n.t('editor.save') }}
+          }
+        </button>
+      </div>
+      <label class="mt-4 flex cursor-pointer items-start gap-3 text-sm">
+        <input type="checkbox" class="mt-1 h-4 w-4 accent-sindoor" [ngModel]="isPublic()" (ngModelChange)="isPublic.set($event)" />
+        <span>
+          {{ i18n.t('editor.visibility') }}
+          <span class="block text-xs text-ink-soft">{{ i18n.t('editor.visibilityHint') }}</span>
+        </span>
+      </label>
+      <p class="mt-2 text-xs text-ink-soft">{{ i18n.t('editor.consent') }}</p>
+    </div>
+
+    <!-- ── Controls ────────────────────────────────────────────── -->
+    <div class="panel p-4 md:p-6">
+      <div class="mb-5 grid grid-cols-3 gap-1 rounded-full bg-cream p-1" role="tablist">
+        @for (t of ['photo', 'design', 'text']; track t) {
+          <button type="button" role="tab" [attr.aria-selected]="tab() === t" (click)="tab.set($any(t))"
+                  class="rounded-full py-2 text-sm transition"
+                  [class.bg-sindoor]="tab() === t" [class.text-cream]="tab() === t">
+            {{ i18n.t($any('editor.tab.' + t)) }}
+          </button>
+        }
+      </div>
+
+      @switch (tab()) {
+        <!-- Photo -->
+        @case ('photo') {
+          <div class="grid grid-cols-2 gap-3">
+            <label class="btn-primary cursor-pointer">
+              📷 {{ i18n.t('editor.camera') }}
+              <input type="file" accept="image/*" capture="user" class="sr-only" (change)="onFile($event)" />
+            </label>
+            <label class="btn-ghost cursor-pointer">
+              🖼 {{ photo() ? i18n.t('editor.changePhoto') : i18n.t('editor.gallery') }}
+              <input type="file" accept="image/*" class="sr-only" (change)="onFile($event)" />
+            </label>
+          </div>
+
+          @if (photo()) {
+            <div class="mt-6 space-y-4">
+              <label class="block">
+                <span class="label">{{ i18n.t('editor.zoom') }}</span>
+                <input type="range" min="0.5" max="4" step="0.01" class="w-full"
+                       [ngModel]="transform().scale" (ngModelChange)="setZoom(+$event)" />
+              </label>
+              <div class="flex gap-3">
+                <button type="button" class="btn-ghost flex-1" (click)="rotate()">⟳ {{ i18n.t('editor.rotate') }}</button>
+                <button type="button" class="btn-ghost flex-1" (click)="resetPhoto()">{{ i18n.t('editor.reset') }}</button>
+              </div>
+            </div>
+          }
+          <p class="mt-6 flex gap-2 text-xs text-ink-soft"><span aria-hidden="true">🔒</span>{{ i18n.t('home.privacy') }}</p>
+        }
+
+        <!-- Design -->
+        @case ('design') {
+          <app-template-picker [day]="day()" [lang]="cardLang()" [selected]="templateId()" (pick)="templateId.set($event)" />
+        }
+
+        <!-- Text -->
+        @case ('text') {
+          <div class="space-y-5">
+            <div>
+              <span class="label">{{ i18n.t('editor.cardLang') }}</span>
+              <div class="flex gap-2">
+                <button type="button" class="chip" [class.chip-active]="cardLang() === 'ne'" (click)="setCardLang('ne')">नेपाली</button>
+                <button type="button" class="chip" [class.chip-active]="cardLang() === 'en'" (click)="setCardLang('en')">English</button>
+              </div>
+            </div>
+
+            <div>
+              <span class="label">{{ i18n.t('editor.suggestions') }}</span>
+              <div class="flex flex-col gap-2">
+                @for (g of suggestions(); track g.id) {
+                  <button type="button" (click)="applyGreeting(g)" [lang]="cardLang()"
+                          class="rounded-xl border px-4 py-2.5 text-left transition hover:bg-cream"
+                          [class.border-sindoor]="greetingId() === g.id" [class.bg-cream]="greetingId() === g.id"
+                          [class.border-gold]="greetingId() !== g.id">
+                    {{ suggestionLabel(g) }}
+                  </button>
+                }
+              </div>
+            </div>
+
+            <label class="block">
+              <span class="label">{{ i18n.t('editor.greeting') }}</span>
+              <textarea class="field" rows="2" maxlength="140" [lang]="cardLang()"
+                        [ngModel]="text().greeting" (ngModelChange)="patchText({ greeting: $event })"></textarea>
+            </label>
+            <label class="block">
+              <span class="label">{{ i18n.t('editor.subline') }}</span>
+              <textarea class="field" rows="3" maxlength="220" [lang]="cardLang()"
+                        [ngModel]="text().subline" (ngModelChange)="patchText({ subline: $event })"></textarea>
+            </label>
+            <label class="block">
+              <span class="label">{{ i18n.t('editor.from') }}</span>
+              <input class="field" maxlength="60" [placeholder]="i18n.t('editor.fromPlaceholder')"
+                     [ngModel]="text().from" (ngModelChange)="patchText({ from: $event })" />
+            </label>
+
+            <div>
+              <span class="label">{{ i18n.t('editor.color') }}</span>
+              <div class="flex flex-wrap gap-2">
+                @for (c of swatches; track $index) {
+                  <button type="button" (click)="patchText({ color: c })"
+                          class="h-9 w-9 rounded-full border-2 shadow-sm transition"
+                          [class.border-sindoor]="text().color === c" [class.scale-110]="text().color === c"
+                          [class.border-gold]="text().color !== c"
+                          [style.background]="c ?? templateDefaultColor()"
+                          [attr.aria-label]="c ?? 'default'"></button>
+                }
+              </div>
+            </div>
+
+            <label class="block">
+              <span class="label">{{ i18n.t('editor.position') }}</span>
+              <input type="range" min="-300" max="300" step="2" class="w-full"
+                     [ngModel]="text().offsetY ?? 0" (ngModelChange)="patchText({ offsetY: +$event })" />
+            </label>
+          </div>
+        }
+      }
+    </div>
+  </div>
+</section>

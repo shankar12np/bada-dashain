@@ -1,0 +1,152 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   Tika — global styles
+   Tailwind v4 (CSS-first config) + self-hosted fonts.
+
+   Fonts are self-hosted through @fontsource instead of Google Fonts:
+    • canvas text needs the font loaded *before* drawing — same-origin is reliable
+    • works offline in the PWA
+    • only the subsets actually used are downloaded (unicode-range)
+   ──────────────────────────────────────────────────────────────────────────── */
+@import '@fontsource/mukta/400.css';
+@import '@fontsource/mukta/500.css';
+@import '@fontsource/mukta/700.css';
+@import '@fontsource/yatra-one/400.css';
+@import '@fontsource/kalam/400.css';
+@import '@fontsource/tiro-devanagari-sanskrit/400.css';
+@import '@fontsource/cormorant-garamond/600.css';
+@import '@fontsource/cormorant-garamond/700.css';
+
+@import 'tailwindcss';
+
+@theme {
+  /* Festival palette: sindoor red, maroon, gold, saffron, jamara green, cream */
+  --color-sindoor: #b3121f;
+  --color-sindoor-deep: #8e0e1a;
+  --color-maroon: #4a050b;
+  --color-gold: #d9a93f;
+  --color-gold-deep: #a87a22;
+  --color-gold-soft: #f3dfa9;
+  --color-saffron: #f59e0b;
+  --color-marigold: #ea8a00;
+  --color-jamara: #4d7c0f;
+  --color-cream: #fbf3e4;
+  --color-paper: #fffaf1;
+  --color-ink: #2a1a12;
+  --color-ink-soft: #6b5544;
+
+  --font-sans: 'Mukta', system-ui, sans-serif;
+  --font-display: 'Yatra One', 'Mukta', serif;
+  --font-serif: 'Cormorant Garamond', 'Mukta', serif;
+  --font-script: 'Kalam', 'Mukta', cursive;
+
+  --shadow-card: 0 1px 2px rgb(74 5 11 / 0.08), 0 8px 24px -8px rgb(74 5 11 / 0.25);
+}
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    @apply bg-paper text-ink font-sans antialiased;
+    min-height: 100dvh;
+  }
+  /* Devanagari needs more line-height than Latin for matras and conjuncts. */
+  :lang(ne) body,
+  [lang='ne'] {
+    line-height: 1.7;
+  }
+  h1, h2, h3 {
+    text-wrap: balance;
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-gold);
+    outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* Custom utility so other classes can @apply it (Tailwind v4 rule). */
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-base font-medium
+    transition active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+@layer components {
+  /* Display heading: Yatra One for Devanagari, Cormorant for Latin. */
+  .heading {
+    @apply font-display tracking-normal;
+  }
+  :lang(en) .heading {
+    font-family: var(--font-serif);
+    font-weight: 700;
+  }
+
+  .btn-primary {
+    @apply btn bg-sindoor text-cream shadow-card hover:bg-sindoor-deep;
+  }
+  .btn-gold {
+    @apply btn bg-gold text-maroon shadow-card hover:bg-gold-soft;
+  }
+  .btn-ghost {
+    @apply btn border border-gold/60 bg-paper/70 text-ink hover:bg-cream;
+  }
+  .chip {
+    @apply inline-flex shrink-0 items-center rounded-full border border-gold/50 bg-paper px-4 py-1.5 text-sm
+      transition hover:bg-cream;
+  }
+  .chip-active {
+    @apply border-sindoor bg-sindoor text-cream hover:bg-sindoor;
+  }
+  .panel {
+    @apply rounded-2xl border border-gold/30 bg-paper shadow-card;
+  }
+  .field {
+    @apply w-full rounded-xl border border-gold/50 bg-white px-4 py-3 text-base outline-none
+      focus:border-sindoor focus:ring-2 focus:ring-sindoor/20;
+  }
+  .label {
+    @apply mb-1.5 block text-sm font-medium text-ink-soft;
+  }
+
+  /* Dhaka-textile band (pure CSS/SVG, no image request). */
+  .dhaka-band {
+    height: 18px;
+    background-color: var(--color-maroon);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='18'%3E%3Cpath d='M18 1 L34 9 L18 17 L2 9Z' fill='%23b3121f'/%3E%3Cpath d='M18 5 L26 9 L18 13 L10 9Z' fill='%23d9a93f'/%3E%3Crect x='16.5' y='7.5' width='3' height='3' fill='%234a050b'/%3E%3Cpath d='M0 0 L3 4 L-3 4Z M36 0 L39 4 L33 4Z M0 18 L3 14 L-3 14Z M36 18 L39 14 L33 14Z' fill='%23fbf3e4'/%3E%3C/svg%3E");
+    background-repeat: repeat-x;
+    background-size: 36px 18px;
+  }
+
+  /* Subtle mandala watermark for festive sections. */
+  .mandala-bg {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-100 -100 200 200'%3E%3Cg fill='none' stroke='%23d9a93f' stroke-width='0.6' opacity='0.55'%3E%3Ccircle r='96'/%3E%3Ccircle r='70'/%3E%3Ccircle r='44'/%3E%3Ccircle r='14'/%3E%3Cg id='p'%3E%3Cpath d='M0-44 C10-58 8-66 0-70 C-8-66 -10-58 0-44Z'/%3E%3Cpath d='M0-70 C14-82 10-92 0-96 C-10-92 -14-82 0-70Z'/%3E%3C/g%3E%3Cuse href='%23p' transform='rotate(30)'/%3E%3Cuse href='%23p' transform='rotate(60)'/%3E%3Cuse href='%23p' transform='rotate(90)'/%3E%3Cuse href='%23p' transform='rotate(120)'/%3E%3Cuse href='%23p' transform='rotate(150)'/%3E%3Cuse href='%23p' transform='rotate(180)'/%3E%3Cuse href='%23p' transform='rotate(210)'/%3E%3Cuse href='%23p' transform='rotate(240)'/%3E%3Cuse href='%23p' transform='rotate(270)'/%3E%3Cuse href='%23p' transform='rotate(300)'/%3E%3Cuse href='%23p' transform='rotate(330)'/%3E%3C/g%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+  }
+
+  .scroll-x {
+    @apply flex gap-3 overflow-x-auto pb-2;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  .scroll-x > * {
+    scroll-snap-align: start;
+  }
+  .scroll-x::-webkit-scrollbar {
+    display: none;
+  }
+
+  .skeleton {
+    @apply animate-pulse rounded-xl bg-gold-soft/50;
+  }
+}
+
+/* Range input in festival colours. */
+input[type='range'] {
+  accent-color: var(--color-sindoor);
+}

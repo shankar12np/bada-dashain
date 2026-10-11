@@ -1,0 +1,35 @@
+rules_version = '2';
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Tika — Cloud Storage Security Rules
+//
+// Only *rendered* cards are stored (card.jpg, thumb.jpg, og.jpg). The user's
+// original photo never leaves their device — better privacy and lower cost.
+//
+// Layout:  cards/{uid}/{cardId}/{card|thumb|og}.jpg
+// ─────────────────────────────────────────────────────────────────────────────
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    match /cards/{uid}/{cardId}/{file} {
+      // Rendered cards are public by link — shared previews must load anywhere.
+      allow read: if true;
+
+      // Owner can write once (no overwrites → a shared link can't be swapped
+      // for different content later). Small, image-only files.
+      allow create: if request.auth != null
+        && request.auth.uid == uid
+        && file.matches('^(card|thumb|og)\\.(jpg|webp|png)$')
+        && request.resource.size < 3 * 1024 * 1024
+        && request.resource.contentType.matches('image/(jpeg|webp|png)');
+
+      allow update: if false;
+      allow delete: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // Everything else is closed.
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,126 @@
+rules_version = '2';
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Tika — Firestore Security Rules
+//
+// Principles
+//  • Cards are public by link (status == 'active'); only `visibility == 'public'`
+//    cards can be listed in the gallery.
+//  • A card's content is immutable after creation (simpler + no vandalism).
+//    Owners may only flip visibility or delete.
+//  • Counters (remixCount, reportCount) and moderation (status) are written
+//    ONLY by Cloud Functions (Admin SDK bypasses rules) — clients can't fake them.
+//  • Every create is validated field-by-field with a key allow-list.
+// ─────────────────────────────────────────────────────────────────────────────
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── helpers ────────────────────────────────────────────────────────────
+    function signedIn() { return request.auth != null; }
+    function isUser(uid) { return signedIn() && request.auth.uid == uid; }
+
+    function isStr(v, min, max) {
+      return v is string && v.size() >= min && v.size() <= max;
+    }
+    function isOptStr(data, key, max) {
+      return !(key in data) || data[key] == null || isStr(data[key], 0, max);
+    }
+    function validDay(d) {
+      return d in ['dashain', 'ghatasthapana', 'navaratri', 'fulpati',
+                   'maha-ashtami', 'maha-navami', 'bijaya-dashami', 'kojagrat-purnima'];
+    }
+    function isNum(v, lo, hi) { return (v is int || v is float) && v >= lo && v <= hi; }
+
+    // Text the user typed onto the card.
+    function validText(t) {
+      return t is map
+        && t.keys().hasOnly(['greeting', 'subline', 'from', 'color', 'offsetY', 'lang'])
+        && isStr(t.greeting, 1, 140)
+        && isOptStr(t, 'subline', 220)
+        && isOptStr(t, 'from', 60)
+        && (!('color' in t) || t.color == null || t.color.matches('^#[0-9a-fA-F]{6}$'))
+        && (!('offsetY' in t) || isNum(t.offsetY, -400, 400))
+        && t.lang in ['ne', 'en'];
+    }
+
+    // Storage paths must live under the creator's own folder.
+    function ownImagePath(p, uid, cardId) {
+      return p is string && p.matches('^cards/' + uid + '/' + cardId + '/[a-z]+\\.(jpg|png|webp)$');
+    }
+
+    // ── cards ──────────────────────────────────────────────────────────────
+    match /cards/{cardId} {
+      // Get by id: any active card (shared links work for logged-out viewers),
+      // plus the owner can always see their own (even if moderated).
+      allow get: if resource.data.status == 'active'
+                 || isUser(resource.data.ownerUid);
+
+      // Queries: gallery (public + active) or "my cards" (ownerUid == me).
+      // Firestore requires the query's filters to guarantee these conditions.
+      allow list: if (resource.data.visibility == 'public' && resource.data.status == 'active')
+                  || isUser(resource.data.ownerUid);
+
+      allow create: if isUser(request.resource.data.ownerUid)
+        && request.resource.data.keys().hasOnly([
+             'ownerUid', 'ownerName', 'dayId', 'templateId', 'text', 'visibility',
+             'imagePath', 'imageUrl', 'thumbUrl', 'ogUrl', 'width', 'height',
+             'remixOf', 'rootId', 'remixCount', 'reportCount', 'status',
+             'createdAt', 'schemaVersion'])
+        && request.resource.data.keys().hasAll([
+             'ownerUid', 'dayId', 'templateId', 'text', 'visibility', 'imagePath',
+             'imageUrl', 'thumbUrl', 'status', 'createdAt', 'remixCount', 'reportCount'])
+        && validDay(request.resource.data.dayId)
+        && isStr(request.resource.data.templateId, 2, 40)
+        && validText(request.resource.data.text)
+        && request.resource.data.visibility in ['public', 'unlisted']
+        && ownImagePath(request.resource.data.imagePath, request.auth.uid, cardId)
+        && isStr(request.resource.data.imageUrl, 10, 600)
+        && isStr(request.resource.data.thumbUrl, 10, 600)
+        && isOptStr(request.resource.data, 'ogUrl', 600)
+        && isOptStr(request.resource.data, 'ownerName', 60)
+        && isOptStr(request.resource.data, 'remixOf', 40)
+        && isOptStr(request.resource.data, 'rootId', 40)
+        && request.resource.data.status == 'active'
+        && request.resource.data.remixCount == 0
+        && request.resource.data.reportCount == 0
+        && request.resource.data.createdAt == request.time;
+
+      // Owner may only change visibility.
+      allow update: if isUser(resource.data.ownerUid)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['visibility'])
+        && request.resource.data.visibility in ['public', 'unlisted'];
+
+      allow delete: if isUser(resource.data.ownerUid);
+    }
+
+    // ── reports (write-only for users) ───────────────────────────────────
+    // Doc id is `${cardId}_${uid}` so each user can report a card once.
+    match /reports/{reportId} {
+      allow create: if signedIn()
+        && reportId == request.resource.data.cardId + '_' + request.auth.uid
+        && request.resource.data.keys().hasOnly(['cardId', 'reporterUid', 'reason', 'note', 'createdAt'])
+        && request.resource.data.reporterUid == request.auth.uid
+        && isStr(request.resource.data.cardId, 10, 40)
+        && request.resource.data.reason in ['inappropriate', 'disrespectful', 'spam', 'copyright', 'other']
+        && isOptStr(request.resource.data, 'note', 300)
+        && request.resource.data.createdAt == request.time;
+      allow read, update, delete: if false;
+    }
+
+    // ── public user profiles ─────────────────────────────────────────────
+    match /users/{uid} {
+      allow read: if true;
+      allow create, update: if isUser(uid)
+        && request.resource.data.keys().hasOnly(['displayName', 'photoURL', 'updatedAt'])
+        && isOptStr(request.resource.data, 'displayName', 60)
+        && isOptStr(request.resource.data, 'photoURL', 600)
+        && request.resource.data.updatedAt == request.time;
+      allow delete: if isUser(uid);
+    }
+
+    // Everything else is closed.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
