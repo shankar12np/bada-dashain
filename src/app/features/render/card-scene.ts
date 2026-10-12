@@ -19,6 +19,7 @@ import type { CardDesign, CardText, PhotoTransform } from '../../models/card.mod
 import { CARD_HEIGHT, CARD_WIDTH, type CardTemplate, type PhotoFrame, type TextSlot } from '../../models/template.model';
 import { getTemplate } from '../../data/templates';
 import { buildLayer, backgroundGradient, ogDecor } from './motifs';
+import { environment } from '../../../environments/environment';
 
 // Allow pinch-zoom while a drag is in progress (mobile).
 Konva.hitOnDragEnabled = true;
@@ -422,6 +423,29 @@ export class CardScene {
     }
     this.textLayer.add(group);
     this.textGroup = group;
+    this.textLayer.add(this.credit(text.lang));
+  }
+
+  /**
+   * Small "make your own" badge at the bottom of every card, so people who see a
+   * shared card (WhatsApp status, Facebook…) know where to make theirs.
+   */
+  private credit(lang: CardText['lang']): Konva.Label {
+    const site = environment.siteUrl.replace(/^https?:\/\//, '');
+    const label = new Konva.Label({ listening: false, opacity: 0.92 });
+    label.add(
+      new Konva.Tag({ fill: 'rgba(30,12,8,0.62)', cornerRadius: 17 }),
+      new Konva.Text({
+        text: `   ${lang === 'ne' ? 'तपाईं पनि बनाउनुहोस्' : 'Make your own'}  ·  ${site}   `,
+        fontFamily: '"Mukta", sans-serif',
+        fontStyle: '500',
+        fontSize: 21,
+        fill: '#FBF3E4',
+        padding: 8,
+      }),
+    );
+    label.position({ x: (CARD_WIDTH - label.width()) / 2, y: CARD_HEIGHT - label.height() - 8 });
+    return label;
   }
 
   // ── gestures: wheel zoom (desktop) + pinch zoom (touch) ──────────────────

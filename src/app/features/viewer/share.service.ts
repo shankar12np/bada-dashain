@@ -23,6 +23,11 @@ export class ShareService {
     return `${card.text.greeting}\n${this.i18n.t('viewer.shareText')}`;
   }
 
+  /** "Make your own" line with the home page link, appended to shared messages. */
+  private invite(): string {
+    return `${this.i18n.t('share.makeYours')} 👉 ${location.origin}`;
+  }
+
   get canNativeShare(): boolean {
     return typeof navigator !== 'undefined' && 'share' in navigator;
   }
@@ -32,7 +37,7 @@ export class ShareService {
     const url = this.url(card);
     if (this.canNativeShare) {
       try {
-        await navigator.share({ title: 'Tika · टीका', text: this.message(card), url });
+        await navigator.share({ title: 'Bada Dashain · बडा दशैं', text: `${this.message(card)}\n\n${this.invite()}\n`, url });
         return;
       } catch (e) {
         if ((e as Error).name === 'AbortError') return;
@@ -50,7 +55,7 @@ export class ShareService {
       const blob = await this.fetchImage(card);
       const file = new File([blob], `tika-${card.dayId}.jpg`, { type: 'image/jpeg' });
       if (navigator.canShare?.({ files: [file] })) {
-        await navigator.share({ files: [file], text: `${this.message(card)}\n${this.url(card)}` });
+        await navigator.share({ files: [file], text: `${this.message(card)}\n${this.url(card)}\n\n${this.invite()}` });
       } else {
         await this.render.saveImage(blob, file.name);
       }
@@ -68,7 +73,7 @@ export class ShareService {
   }
 
   whatsappUrl(card: Card): string {
-    return `https://wa.me/?text=${encodeURIComponent(`${this.message(card)}\n${this.url(card)}`)}`;
+    return `https://wa.me/?text=${encodeURIComponent(`${this.message(card)}\n${this.url(card)}\n\n${this.invite()}`)}`;
   }
 
   facebookUrl(card: Card): string {
@@ -76,7 +81,7 @@ export class ShareService {
   }
 
   viberUrl(card: Card): string {
-    return `viber://forward?text=${encodeURIComponent(`${this.message(card)}\n${this.url(card)}`)}`;
+    return `viber://forward?text=${encodeURIComponent(`${this.message(card)}\n${this.url(card)}\n\n${this.invite()}`)}`;
   }
 
   async copy(text: string): Promise<void> {

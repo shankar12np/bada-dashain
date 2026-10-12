@@ -80,6 +80,7 @@ export const T = {
   'editor.photoTooBig': { ne: 'फोटो धेरै ठूलो छ (२५ MB भन्दा कम)।', en: 'That photo is too large (max 25 MB).' },
   'editor.saveError': { ne: 'सेभ हुन सकेन। इन्टरनेट जाँच गरी फेरि प्रयास गर्नुहोस्।', en: 'Could not save. Check your connection and try again.' },
 
+  'share.makeYours': { ne: 'तपाईं पनि आफ्नो दशैं कार्ड बनाउनुहोस्', en: 'Make your own Dashain card' },
   'save.hint': {
     ne: 'तस्बिरमा थिचिराख्नुहोस्, अनि "Save to Photos" थिच्नुहोस्।',
     en: 'Press and hold the picture, then tap "Save to Photos".',
