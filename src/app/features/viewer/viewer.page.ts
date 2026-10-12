@@ -73,6 +73,7 @@ import { ShareService } from './share.service';
                 <a class="btn-ghost" [href]="share.telegramUrl(c)" target="_blank" rel="noopener">Telegram</a>
                 <a class="btn-ghost" [href]="share.xUrl(c)" target="_blank" rel="noopener">X</a>
                 <button type="button" class="btn-ghost" (click)="share.copy(share.url(c))">🔗 {{ i18n.t('viewer.copy') }}</button>
+                <button type="button" class="btn-ghost" (click)="share.download(c)">⬇ {{ i18n.t('editor.download') }}</button>
               </div>
             </div>
 

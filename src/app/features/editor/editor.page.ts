@@ -243,6 +243,12 @@ export class EditorPage {
   }
 
   // ── output ──────────────────────────────────────────────────────────────
+  /** Save the card image (to Photos on iPhone, Downloads elsewhere). */
+  protected async download(): Promise<void> {
+    if (!this.scene) return;
+    await this.render.downloadPng(this.scene, `bada-dashain-${this.day()}.png`);
+  }
+
   protected async save(): Promise<void> {
     if (!this.scene || this.saving()) return;
     if (!this.photo()) {

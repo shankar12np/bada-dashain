@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { I18nService } from '../../core/i18n/i18n.service';
 import { ToastService } from '../../core/ui/toast.service';
+import { ImageSaveService } from '../../core/ui/image-save.service';
 import type { Card } from '../../models/card.model';
 
 /**
@@ -12,6 +13,7 @@ import type { Card } from '../../models/card.model';
 export class ShareService {
   private readonly i18n = inject(I18nService);
   private readonly toast = inject(ToastService);
+  private readonly saver = inject(ImageSaveService);
 
   url(card: Card): string {
     return `${location.origin}/c/${card.id}`;
@@ -42,6 +44,17 @@ export class ShareService {
       }
     }
     await this.copy(url);
+  }
+
+  /** Save the card image (Photos on iPhone, Downloads elsewhere). Needs Storage CORS. */
+  async download(card: Card): Promise<void> {
+    try {
+      const res = await fetch(card.imageUrl, { mode: 'cors' });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      await this.saver.save(await res.blob(), `bada-dashain-${card.dayId}.jpg`);
+    } catch {
+      window.open(card.imageUrl, '_blank', 'noopener');
+    }
   }
 
   whatsappUrl(card: Card): string {
