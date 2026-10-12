@@ -73,7 +73,17 @@ export type Layer =
   | { kind: 'trishul'; x: number; y: number; size: number; color: string }
   | { kind: 'lotus'; x: number; y: number; size: number; color: string; accent: string }
   | { kind: 'moon'; x: number; y: number; r: number; color: string; glow: string }
-  | { kind: 'image'; src: string; x: number; y: number; width: number; height: number; opacity?: number }
+  | {
+      kind: 'image';
+      src: string;
+      x: number;
+      y: number;
+      width: number;
+      height: number;
+      opacity?: number;
+      /** Ornate gold frame with a soft shadow, for devotional artwork. */
+      frame?: { color: string; width: number };
+    }
   | { kind: 'grain'; opacity: number };
 
 export interface CardTemplate {

@@ -705,26 +705,63 @@ function grain(w: number, h: number, opacity: number): Konva.Shape {
   }, opacity);
 }
 
-/** Loads an external artwork layer (e.g. licensed Durga illustration). */
-function imageLayer(l: Extract<Layer, { kind: 'image' }>): Promise<Konva.Image> {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = () =>
-      resolve(
-        new Konva.Image({
-          image: img,
-          x: l.x,
-          y: l.y,
-          width: l.width,
-          height: l.height,
-          opacity: l.opacity ?? 1,
-          listening: false,
-        }),
-      );
-    img.onerror = () => reject(new Error(`Could not load template art: ${l.src}`));
-    img.src = l.src;
-  });
+/** Artwork is loaded once per session and shared by every render (editor, previews, exports). */
+const artCache = new Map<string, Promise<HTMLImageElement>>();
+
+function loadArt(src: string): Promise<HTMLImageElement> {
+  let p = artCache.get(src);
+  if (!p) {
+    p = new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.decoding = 'async';
+      img.onload = () => resolve(img);
+      img.onerror = () => {
+        artCache.delete(src); // allow a retry later
+        reject(new Error(`Could not load template art: ${src}`));
+      };
+      img.src = src;
+    });
+    artCache.set(src, p);
+  }
+  return p;
+}
+
+/**
+ * Artwork layer (e.g. a devotional painting). Drawn as a framed panel:
+ * the art is never cropped, covered or recoloured — it keeps pride of place.
+ */
+async function imageLayer(l: Extract<Layer, { kind: 'image' }>): Promise<Konva.Group> {
+  const img = await loadArt(l.src);
+  const g = new Konva.Group({ listening: false, opacity: l.opacity ?? 1 });
+  if (l.frame) {
+    const fw = l.frame.width;
+    // Shadow + outer gold band.
+    g.add(
+      new Konva.Rect({
+        x: l.x - fw,
+        y: l.y - fw,
+        width: l.width + fw * 2,
+        height: l.height + fw * 2,
+        fill: l.frame.color,
+        shadowColor: 'black',
+        shadowBlur: 28,
+        shadowOpacity: 0.45,
+        shadowOffset: { x: 0, y: 8 },
+      }),
+    );
+  }
+  g.add(new Konva.Image({ image: img, x: l.x, y: l.y, width: l.width, height: l.height }));
+  if (l.frame) {
+    // Fine inner and outer rules give the frame a carved, gilded look.
+    const fw = l.frame.width;
+    const dark = shade(l.frame.color, -0.35);
+    g.add(
+      new Konva.Rect({ x: l.x - 1, y: l.y - 1, width: l.width + 2, height: l.height + 2, stroke: dark, strokeWidth: 2 }),
+      new Konva.Rect({ x: l.x - fw + 3, y: l.y - fw + 3, width: l.width + fw * 2 - 6, height: l.height + fw * 2 - 6, stroke: dark, strokeWidth: 1.5 }),
+    );
+  }
+  return g;
 }
 
 /** Build a Konva node for one declarative layer. */
