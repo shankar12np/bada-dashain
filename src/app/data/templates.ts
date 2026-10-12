@@ -120,6 +120,34 @@ export const TEMPLATES: readonly CardTemplate[] = [
     },
   },
 
+  // D3 ── Tika Thali: artwork public/art/thali.jpg (any shape — fitted, never cropped)
+  {
+    id: 'tika-thali',
+    name: { ne: 'टीका थाली', en: 'Tika Thali' },
+    style: 'traditional',
+    days: ['bijaya-dashami', 'kojagrat-purnima', 'dashain'],
+    palette: ROYAL,
+    background: [
+      { kind: 'sun-rays', cx: 540, cy: 360, r: 1000, color: ROYAL.gold, opacity: 0.08, count: 40 },
+      { kind: 'mandala', cx: 540, cy: 360, r: 400, color: ROYAL.gold, opacity: 0.14 },
+      { kind: 'pattern-dhaka', y: 0, height: 44, colors: ['#3F050B', ROYAL.primary, ROYAL.gold, ROYAL.accent] },
+      { kind: 'pattern-dhaka', y: 1306, height: 44, colors: ['#3F050B', ROYAL.primary, ROYAL.gold, ROYAL.accent] },
+      { kind: 'border', inset: 60, color: ROYAL.gold, width: 3, double: true, corners: true },
+      { kind: 'grain', opacity: 0.05 },
+      { kind: 'image', src: 'art/thali.jpg', x: 260, y: 110, width: 560, height: 500, fit: 'contain', frame: { color: ROYAL.gold, width: 10 } },
+    ],
+    photo: { shape: 'circle', cx: 540, cy: 815, width: 300, height: 300, border: { color: ROYAL.gold, width: 9, double: true } },
+    foreground: [
+      { kind: 'diyo', x: 270, y: 900, size: 44, color: '#B45309', flame: '#F59E0B' },
+      { kind: 'diyo', x: 810, y: 900, size: 44, color: '#B45309', flame: '#F59E0B' },
+    ],
+    text: {
+      greeting: { x: 150, y: 990, width: 780, fontSize: 54, align: 'center', font: 'display', color: ROYAL.text },
+      subline: { x: 170, y: 1120, width: 740, fontSize: 25, align: 'center', font: 'body', color: ROYAL.subtext },
+      from: { x: 170, y: 1215, width: 740, fontSize: 28, align: 'center', font: 'script', color: ROYAL.text },
+    },
+  },
+
   // D2 ── Ashirbad: cream, smaller shrine panel, photo centred below
   {
     id: 'ashirbad',

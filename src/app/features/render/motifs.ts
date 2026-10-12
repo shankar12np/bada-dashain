@@ -733,6 +733,13 @@ function loadArt(src: string): Promise<HTMLImageElement> {
  */
 async function imageLayer(l: Extract<Layer, { kind: 'image' }>): Promise<Konva.Group> {
   const img = await loadArt(l.src);
+  if (l.fit === 'contain') {
+    // Fit inside the box, keep proportions, centre it.
+    const k = Math.min(l.width / img.naturalWidth, l.height / img.naturalHeight);
+    const w = Math.round(img.naturalWidth * k);
+    const h = Math.round(img.naturalHeight * k);
+    l = { ...l, x: l.x + (l.width - w) / 2, y: l.y + (l.height - h) / 2, width: w, height: h };
+  }
   const g = new Konva.Group({ listening: false, opacity: l.opacity ?? 1 });
   if (l.frame) {
     const fw = l.frame.width;

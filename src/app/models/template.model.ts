@@ -83,6 +83,8 @@ export type Layer =
       opacity?: number;
       /** Ornate gold frame with a soft shadow, for devotional artwork. */
       frame?: { color: string; width: number };
+      /** 'contain' keeps the artwork's own shape inside the box (never cropped or stretched). */
+      fit?: 'fill' | 'contain';
     }
   | { kind: 'grain'; opacity: number };
 
