@@ -1,6 +1,6 @@
 [
   {
-    "origin": ["https://your-domain.com", "https://your-firebase-project-id.web.app", "http://localhost:4200"],
+    "origin": [""https://bada-dashain.web.app", "https://bada-dashain.firebaseapp.com", "http://localhost:4200"],
     "method": ["GET"],
     "maxAgeSeconds": 3600
   }

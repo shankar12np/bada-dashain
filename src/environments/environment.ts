@@ -11,14 +11,14 @@ import type { Environment } from './environment.model';
 export const environment: Environment = {
   production: true,
   /** Public origin used for share links and Open Graph URLs. */
-  siteUrl: 'https://your-firebase-project-id.web.app',
+  siteUrl: 'https://bada-dashain.web.app',
   firebase: {
-    apiKey: 'REPLACE_ME',
-    authDomain: 'your-firebase-project-id.firebaseapp.com',
-    projectId: 'your-firebase-project-id',
-    storageBucket: 'your-firebase-project-id.firebasestorage.app',
-    messagingSenderId: 'REPLACE_ME',
-    appId: 'REPLACE_ME',
+    apiKey: 'AIzaSyAADOdMdTJecjBhjZakzoh7EGXxkMDn9ew',
+    authDomain: 'bada-dashain.firebaseapp.com',
+    projectId: 'bada-dashain',
+    storageBucket: 'bada-dashain.firebasestorage.app',
+    messagingSenderId: '636945516956',
+    appId: '1:636945516956:web:46372b308803a31bd2e059',
   },
   /** reCAPTCHA Enterprise site key for App Check. Empty string = App Check off. */
   appCheckSiteKey: '',
