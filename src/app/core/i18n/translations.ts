@@ -14,6 +14,7 @@ export const T = {
   'nav.lang': { ne: 'English', en: 'नेपाली' },
 
   'auth.signIn': { ne: 'Google बाट साइन इन', en: 'Sign in with Google' },
+  'auth.signInShort': { ne: 'साइन इन', en: 'Sign in' },
   'auth.signOut': { ne: 'साइन आउट', en: 'Sign out' },
   'auth.guest': { ne: 'अतिथि', en: 'Guest' },
   'auth.cancelled': { ne: 'साइन इन रद्द गरियो।', en: 'Sign-in was cancelled.' },

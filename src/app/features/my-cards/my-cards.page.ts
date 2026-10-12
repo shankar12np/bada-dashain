@@ -16,9 +16,9 @@ import { CardRepository } from '../cards/card.repository';
     <section class="mx-auto max-w-6xl px-4 pb-28 pt-6 md:pb-12 md:pt-10">
       <h1 class="heading mb-2 text-3xl text-sindoor">{{ i18n.t('mine.title') }}</h1>
       @if (auth.ready() && !auth.isRegistered()) {
-        <div class="mb-6 flex flex-wrap items-center gap-3 rounded-xl border border-gold/50 bg-cream p-4 text-sm">
-          <span class="flex-1">{{ i18n.t('auth.saveHint') }}</span>
-          <button type="button" class="btn-primary py-2" (click)="signIn()">{{ i18n.t('auth.signIn') }}</button>
+        <div class="mb-6 flex flex-col gap-3 rounded-xl border border-gold/50 bg-cream p-4 text-sm sm:flex-row sm:items-center">
+          <span class="sm:flex-1">{{ i18n.t('auth.saveHint') }}</span>
+          <button type="button" class="btn-primary self-start py-2 sm:self-auto" (click)="signIn()">{{ i18n.t('auth.signIn') }}</button>
         </div>
       }
 
