@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { ImageSaveService, download } from '../../core/ui/image-save.service';
 import type { CardDesign } from '../../models/card.model';
 import { CARD_WIDTH } from '../../models/template.model';
 import { CardScene, composeOgImage, type SceneCallbacks, type SceneOptions } from './card-scene';
@@ -79,21 +80,22 @@ export class CardRenderService {
     return { card, thumb, og };
   }
 
-  /** Download a lossless PNG of the card — works fully offline, no account needed. */
+  private readonly saver = inject(ImageSaveService);
+
+  /** Save the card as a lossless PNG (Photos on iPhone, Downloads elsewhere). */
   async downloadPng(scene: CardScene, filename = 'dashain-card.png'): Promise<void> {
     const blob = await scene.toBlob(CARD_WIDTH, 'image/png');
-    this.saveBlob(blob, filename);
+    await this.saver.save(blob, filename);
   }
 
+  /** Save any image blob (see ImageSaveService). */
+  saveImage(blob: Blob, filename: string): Promise<void> {
+    return this.saver.save(blob, filename);
+  }
+
+  /** Plain file download. */
   saveBlob(blob: Blob, filename: string): void {
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 2000);
+    download(blob, filename);
   }
 
   private decodeWithImg(file: File): Promise<HTMLImageElement> {
@@ -112,3 +114,4 @@ export class CardRenderService {
     });
   }
 }
+

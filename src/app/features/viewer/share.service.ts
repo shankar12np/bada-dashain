@@ -52,7 +52,7 @@ export class ShareService {
       if (navigator.canShare?.({ files: [file] })) {
         await navigator.share({ files: [file], text: `${this.message(card)}\n${this.url(card)}` });
       } else {
-        this.render.saveBlob(blob, file.name);
+        await this.render.saveImage(blob, file.name);
       }
     } catch (e) {
       if ((e as Error).name !== 'AbortError') this.toast.error(this.i18n.t('error.generic'));
@@ -61,7 +61,7 @@ export class ShareService {
 
   async download(card: Card): Promise<void> {
     try {
-      this.render.saveBlob(await this.fetchImage(card), `tika-${card.dayId}.jpg`);
+      await this.render.saveImage(await this.fetchImage(card), `tika-${card.dayId}.jpg`);
     } catch {
       window.open(card.imageUrl, '_blank', 'noopener');
     }

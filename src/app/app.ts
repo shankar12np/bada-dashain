@@ -3,11 +3,12 @@ import { RouterOutlet } from '@angular/router';
 import { I18nService } from './core/i18n/i18n.service';
 import { SiteHeader } from './shared/components/site-header';
 import { Toasts } from './shared/components/toasts';
+import { SavePreview } from './shared/components/save-preview';
 
 /** App shell: header, routed page, footer, toasts. */
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, SiteHeader, Toasts],
+  imports: [RouterOutlet, SiteHeader, Toasts, SavePreview],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <app-site-header />
@@ -21,6 +22,7 @@ import { Toasts } from './shared/components/toasts';
       </div>
     </footer>
     <app-toasts />
+    <app-save-preview />
   `,
 })
 export class App {
