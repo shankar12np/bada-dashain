@@ -90,7 +90,7 @@ export const TEMPLATES: readonly CardTemplate[] = [
   // Layout rule: the Goddess is always framed on her own, at the top, never
   // cropped and never overlapped by the user's photo or by text.
 
-  // D1 ── Durga Darshan: shrine panel, photo and blessing below side by side
+  // D1 ── Durga Darshan: shrine panel on top, the person's photo large below
   {
     id: 'durga-darshan',
     name: { ne: 'दुर्गा दर्शन', en: 'Durga Darshan' },
@@ -98,25 +98,26 @@ export const TEMPLATES: readonly CardTemplate[] = [
     days: ['bijaya-dashami', 'maha-ashtami', 'maha-navami', 'navaratri', 'ghatasthapana', 'dashain'],
     palette: ROYAL,
     background: [
-      { kind: 'sun-rays', cx: 540, cy: 420, r: 1000, color: ROYAL.gold, opacity: 0.07, count: 40 },
-      { kind: 'mandala', cx: 540, cy: 420, r: 430, color: ROYAL.gold, opacity: 0.14, petals: 20 },
+      { kind: 'sun-rays', cx: 540, cy: 760, r: 1000, color: ROYAL.gold, opacity: 0.07, count: 40 },
+      { kind: 'mandala', cx: 540, cy: 760, r: 330, color: ROYAL.gold, opacity: 0.14, petals: 20 },
       { kind: 'pattern-dhaka', y: 0, height: 44, colors: ['#3F050B', ROYAL.primary, ROYAL.gold, ROYAL.accent] },
       { kind: 'pattern-dhaka', y: 1306, height: 44, colors: ['#3F050B', ROYAL.primary, ROYAL.gold, ROYAL.accent] },
       { kind: 'border', inset: 60, color: ROYAL.gold, width: 3, double: true, corners: true },
       { kind: 'grain', opacity: 0.05 },
-      { kind: 'image', src: 'art/durga.jpg', x: 320, y: 100, width: 440, height: 660, frame: { color: ROYAL.gold, width: 12 } },
-      // Ghatasthapana kalash on the left, Dashami jamara on the right, lamps below.
-      { kind: 'kalash', x: 190, y: 600, size: 92, color: '#C9A227', accent: '#8E0E1A', leaf: '#3F6212' },
-      { kind: 'jamara', x: 890, y: 640, width: 130, height: 250, color: '#C3D35A', count: 30 },
-      { kind: 'diyo', x: 190, y: 735, size: 40, color: '#B45309', flame: '#F59E0B' },
-      { kind: 'diyo', x: 890, y: 735, size: 40, color: '#B45309', flame: '#F59E0B' },
+      { kind: 'image', src: 'art/durga.jpg', x: 400, y: 78, width: 280, height: 420, frame: { color: ROYAL.gold, width: 10 } },
+      // Ghatasthapana kalash on the left, Dashami jamara on the right.
+      { kind: 'kalash', x: 250, y: 400, size: 86, color: '#C9A227', accent: '#8E0E1A', leaf: '#3F6212' },
+      { kind: 'jamara', x: 830, y: 470, width: 120, height: 230, color: '#C3D35A', count: 28 },
     ],
-    photo: { shape: 'circle', cx: 260, cy: 1030, width: 290, height: 290, border: { color: ROYAL.gold, width: 9, double: true } },
-    foreground: [],
+    photo: { shape: 'circle', cx: 540, cy: 765, width: 430, height: 430, border: { color: ROYAL.gold, width: 10, double: true } },
+    foreground: [
+      { kind: 'diyo', x: 205, y: 900, size: 44, color: '#B45309', flame: '#F59E0B' },
+      { kind: 'diyo', x: 875, y: 900, size: 44, color: '#B45309', flame: '#F59E0B' },
+    ],
     text: {
-      greeting: { x: 450, y: 850, width: 560, fontSize: 50, align: 'center', font: 'display', color: ROYAL.text },
-      subline: { x: 450, y: 1000, width: 560, fontSize: 24, align: 'center', font: 'body', color: ROYAL.subtext },
-      from: { x: 450, y: 1200, width: 560, fontSize: 28, align: 'center', font: 'script', color: ROYAL.text },
+      greeting: { x: 120, y: 1012, width: 840, fontSize: 48, align: 'center', font: 'display', color: ROYAL.text },
+      subline: { x: 150, y: 1130, width: 780, fontSize: 23, align: 'center', font: 'body', color: ROYAL.subtext },
+      from: { x: 150, y: 1215, width: 780, fontSize: 28, align: 'center', font: 'script', color: ROYAL.text },
     },
   },
 
@@ -128,23 +129,23 @@ export const TEMPLATES: readonly CardTemplate[] = [
     days: ['bijaya-dashami'],
     palette: ROYAL,
     background: [
-      { kind: 'sun-rays', cx: 540, cy: 360, r: 1000, color: ROYAL.gold, opacity: 0.08, count: 40 },
-      { kind: 'mandala', cx: 540, cy: 360, r: 400, color: ROYAL.gold, opacity: 0.14 },
+      { kind: 'sun-rays', cx: 540, cy: 720, r: 1000, color: ROYAL.gold, opacity: 0.08, count: 40 },
+      { kind: 'mandala', cx: 540, cy: 720, r: 330, color: ROYAL.gold, opacity: 0.14 },
       { kind: 'pattern-dhaka', y: 0, height: 44, colors: ['#3F050B', ROYAL.primary, ROYAL.gold, ROYAL.accent] },
       { kind: 'pattern-dhaka', y: 1306, height: 44, colors: ['#3F050B', ROYAL.primary, ROYAL.gold, ROYAL.accent] },
       { kind: 'border', inset: 60, color: ROYAL.gold, width: 3, double: true, corners: true },
       { kind: 'grain', opacity: 0.05 },
-      { kind: 'image', src: 'art/thali.jpg', x: 260, y: 110, width: 560, height: 500, fit: 'contain', frame: { color: ROYAL.gold, width: 10 } },
+      { kind: 'image', src: 'art/thali.jpg', x: 310, y: 84, width: 460, height: 360, fit: 'contain', frame: { color: ROYAL.gold, width: 10 } },
     ],
-    photo: { shape: 'circle', cx: 540, cy: 815, width: 300, height: 300, border: { color: ROYAL.gold, width: 9, double: true } },
+    photo: { shape: 'circle', cx: 540, cy: 720, width: 440, height: 440, border: { color: ROYAL.gold, width: 10, double: true } },
     foreground: [
-      { kind: 'diyo', x: 270, y: 900, size: 44, color: '#B45309', flame: '#F59E0B' },
-      { kind: 'diyo', x: 810, y: 900, size: 44, color: '#B45309', flame: '#F59E0B' },
+      { kind: 'diyo', x: 205, y: 860, size: 44, color: '#B45309', flame: '#F59E0B' },
+      { kind: 'diyo', x: 875, y: 860, size: 44, color: '#B45309', flame: '#F59E0B' },
     ],
     text: {
-      greeting: { x: 150, y: 990, width: 780, fontSize: 54, align: 'center', font: 'display', color: ROYAL.text },
-      subline: { x: 170, y: 1120, width: 740, fontSize: 25, align: 'center', font: 'body', color: ROYAL.subtext },
-      from: { x: 170, y: 1215, width: 740, fontSize: 28, align: 'center', font: 'script', color: ROYAL.text },
+      greeting: { x: 120, y: 980, width: 840, fontSize: 50, align: 'center', font: 'display', color: ROYAL.text },
+      subline: { x: 150, y: 1105, width: 780, fontSize: 24, align: 'center', font: 'body', color: ROYAL.subtext },
+      from: { x: 150, y: 1205, width: 780, fontSize: 28, align: 'center', font: 'script', color: ROYAL.text },
     },
   },
 
@@ -156,26 +157,26 @@ export const TEMPLATES: readonly CardTemplate[] = [
     days: ['bijaya-dashami'],
     palette: CREAM,
     background: [
-      { kind: 'sun-rays', cx: 540, cy: 860, r: 1000, color: '#F4D9A4', opacity: 0.45, count: 48 },
+      { kind: 'sun-rays', cx: 540, cy: 735, r: 1000, color: '#F4D9A4', opacity: 0.45, count: 48 },
       { kind: 'border', inset: 34, color: CREAM.primary, width: 5, double: true, corners: true },
       { kind: 'grain', opacity: 0.05 },
-      { kind: 'image', src: 'art/utsav.jpg', x: 130, y: 96, width: 820, height: 547, fit: 'contain', frame: { color: CREAM.gold, width: 10 } },
+      { kind: 'image', src: 'art/utsav.jpg', x: 240, y: 74, width: 600, height: 400, fit: 'contain', frame: { color: CREAM.gold, width: 10 } },
       { kind: 'jamara', x: 120, y: 1300, width: 130, height: 240, color: '#C3D35A', count: 28 },
       { kind: 'jamara', x: 960, y: 1300, width: 130, height: 240, color: '#C3D35A', count: 28 },
     ],
-    photo: { shape: 'circle', cx: 540, cy: 815, width: 260, height: 260, border: { color: CREAM.gold, width: 9, double: true } },
+    photo: { shape: 'circle', cx: 540, cy: 735, width: 430, height: 430, border: { color: CREAM.gold, width: 10, double: true } },
     foreground: [
-      { kind: 'marigold', x: 360, y: 840, r: 32, color: '#F59E0B' },
-      { kind: 'marigold', x: 720, y: 840, r: 32, color: '#EA580C' },
+      { kind: 'marigold', x: 230, y: 760, r: 36, color: '#F59E0B' },
+      { kind: 'marigold', x: 850, y: 760, r: 36, color: '#EA580C' },
     ],
     text: {
-      greeting: { x: 150, y: 975, width: 780, fontSize: 52, align: 'center', font: 'display', color: CREAM.text },
-      subline: { x: 200, y: 1100, width: 680, fontSize: 24, align: 'center', font: 'body', color: CREAM.subtext },
-      from: { x: 200, y: 1190, width: 680, fontSize: 28, align: 'center', font: 'script', color: CREAM.primary },
+      greeting: { x: 150, y: 990, width: 780, fontSize: 50, align: 'center', font: 'display', color: CREAM.text },
+      subline: { x: 200, y: 1110, width: 680, fontSize: 24, align: 'center', font: 'body', color: CREAM.subtext },
+      from: { x: 200, y: 1200, width: 680, fontSize: 28, align: 'center', font: 'script', color: CREAM.primary },
     },
   },
 
-  // D2 ── Ashirbad: cream, smaller shrine panel, photo centred below
+  // D2 ── Ashirbad: cream, smaller shrine panel, the person's photo large below
   {
     id: 'ashirbad',
     name: { ne: 'आशीर्वाद', en: 'Ashirbad' },
@@ -183,24 +184,24 @@ export const TEMPLATES: readonly CardTemplate[] = [
     days: ['bijaya-dashami', 'maha-ashtami', 'maha-navami', 'navaratri', 'dashain'],
     palette: CREAM,
     background: [
-      { kind: 'sun-rays', cx: 540, cy: 330, r: 900, color: '#F4D9A4', opacity: 0.5, count: 48 },
+      { kind: 'sun-rays', cx: 540, cy: 660, r: 900, color: '#F4D9A4', opacity: 0.5, count: 48 },
       { kind: 'border', inset: 34, color: CREAM.primary, width: 5, double: true, corners: true },
       { kind: 'grain', opacity: 0.05 },
-      { kind: 'image', src: 'art/durga.jpg', x: 380, y: 66, width: 320, height: 480, frame: { color: CREAM.gold, width: 12 } },
+      { kind: 'image', src: 'art/durga.jpg', x: 420, y: 60, width: 240, height: 360, frame: { color: CREAM.gold, width: 10 } },
       // Marigold strings hanging either side of the shrine.
-      ...[0, 1, 2, 3, 4, 5, 6, 7].flatMap((i) => [
-        { kind: 'marigold' as const, x: 310, y: 90 + i * 58, r: 24, color: i % 2 ? '#EA580C' : '#F59E0B' },
-        { kind: 'marigold' as const, x: 770, y: 90 + i * 58, r: 24, color: i % 2 ? '#EA580C' : '#F59E0B' },
+      ...[0, 1, 2, 3, 4, 5].flatMap((i) => [
+        { kind: 'marigold' as const, x: 360, y: 80 + i * 58, r: 23, color: i % 2 ? '#EA580C' : '#F59E0B' },
+        { kind: 'marigold' as const, x: 720, y: 80 + i * 58, r: 23, color: i % 2 ? '#EA580C' : '#F59E0B' },
       ]),
       { kind: 'jamara', x: 120, y: 1300, width: 140, height: 280, color: '#C3D35A', count: 30 },
       { kind: 'jamara', x: 960, y: 1300, width: 140, height: 280, color: '#C3D35A', count: 30 },
     ],
-    photo: { shape: 'circle', cx: 540, cy: 755, width: 310, height: 310, border: { color: CREAM.gold, width: 9, double: true } },
-    foreground: [{ kind: 'tika', x: 540, y: 935, r: 14, color: '#C1121F' }],
+    photo: { shape: 'circle', cx: 540, cy: 665, width: 440, height: 440, border: { color: CREAM.gold, width: 10, double: true } },
+    foreground: [{ kind: 'tika', x: 540, y: 922, r: 14, color: '#C1121F' }],
     text: {
-      greeting: { x: 200, y: 955, width: 680, fontSize: 52, align: 'center', font: 'display', color: CREAM.text },
-      subline: { x: 210, y: 1090, width: 660, fontSize: 25, align: 'center', font: 'body', color: CREAM.subtext },
-      from: { x: 210, y: 1190, width: 660, fontSize: 28, align: 'center', font: 'script', color: CREAM.primary },
+      greeting: { x: 160, y: 950, width: 760, fontSize: 50, align: 'center', font: 'display', color: CREAM.text },
+      subline: { x: 200, y: 1080, width: 680, fontSize: 24, align: 'center', font: 'body', color: CREAM.subtext },
+      from: { x: 200, y: 1185, width: 680, fontSize: 28, align: 'center', font: 'script', color: CREAM.primary },
     },
   },
 

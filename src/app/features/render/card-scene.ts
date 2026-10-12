@@ -233,6 +233,7 @@ export class CardScene {
     this.bgLayer.destroyChildren();
     this.bgLayer.add(backgroundGradient(CARD_WIDTH, CARD_HEIGHT, t.palette.bg));
     bgNodes.forEach((n) => n && this.bgLayer.add(n as Konva.Shape));
+    this.bgLayer.add(this.photoHalo(t.photo, t.palette.gold));
 
     this.fgLayer.destroyChildren();
     this.fgLayer.add(this.frameBorder(t.photo));
@@ -245,19 +246,46 @@ export class CardScene {
       sceneFunc: (ctx) => {
         const c = ctx._context as CanvasRenderingContext2D;
         c.save();
+        // Thicker ring with a warm golden glow so the person's photo is the star of the card.
+        const w = Math.max(12, f.border.width * 1.4);
         c.strokeStyle = f.border.color;
-        c.lineWidth = f.border.width;
-        c.shadowColor = 'rgba(0,0,0,0.25)';
-        c.shadowBlur = 18;
-        tracePath(c, f, f.border.width / 2);
+        c.lineWidth = w;
+        c.shadowColor = 'rgba(255, 200, 90, 0.85)';
+        c.shadowBlur = 34;
+        tracePath(c, f, w / 2);
         c.stroke();
         c.shadowBlur = 0;
+        // Thin bright inner rim, like light catching gilded metal.
+        c.strokeStyle = 'rgba(255, 245, 210, 0.9)';
+        c.lineWidth = 2.5;
+        tracePath(c, f, 1);
+        c.stroke();
+        c.strokeStyle = f.border.color;
         if (f.border.double) {
-          c.lineWidth = Math.max(2, f.border.width / 3);
-          tracePath(c, f, f.border.width * 2.2);
+          c.lineWidth = Math.max(3, w / 3);
+          tracePath(c, f, w * 2);
           c.stroke();
         }
         c.restore();
+      },
+    });
+  }
+
+  /** Radial golden light behind the photo frame (sits behind the photo, so only the rim glows). */
+  private photoHalo(f: PhotoFrame, gold: string): Konva.Shape {
+    return new Konva.Shape({
+      listening: false,
+      sceneFunc: (ctx) => {
+        const c = ctx._context as CanvasRenderingContext2D;
+        const r = Math.max(f.width, f.height) / 2;
+        const g = c.createRadialGradient(f.cx, f.cy, r * 0.75, f.cx, f.cy, r + 110);
+        g.addColorStop(0, hexA(gold, 0.75));
+        g.addColorStop(0.55, hexA(gold, 0.28));
+        g.addColorStop(1, hexA(gold, 0));
+        c.fillStyle = g;
+        c.beginPath();
+        c.arc(f.cx, f.cy, r + 110, 0, Math.PI * 2);
+        c.fill();
       },
     });
   }
@@ -489,6 +517,12 @@ export class CardScene {
     this.photoLayer.batchDraw();
     this.emitTransform();
   }
+}
+
+/** #rrggbb → rgba() with the given alpha. */
+function hexA(hex: string, a: number): string {
+  const n = parseInt(hex.slice(1), 16);
+  return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${a})`;
 }
 
 function sameTextExceptOffset(a: CardText, b: CardText): boolean {
