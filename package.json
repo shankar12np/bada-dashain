@@ -10,7 +10,7 @@
     "emulators": "PATH=\"$(brew --prefix openjdk@21)/bin:$PATH\" firebase emulators:start --only auth,firestore,storage --project demo-tika",
     "deploy:rules": "firebase deploy --only firestore,storage",
     "deploy:web": "ng build && firebase deploy --only hosting",
-    "deploy:functions": "npm --prefix functions install && firebase deploy --only functions",
+    "deploy:functions": "npm --prefix functions install --engine-strict=false && firebase deploy --only functions",
     "firebase": "firebase"
   },
   "private": true,
