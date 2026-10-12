@@ -148,6 +148,33 @@ export const TEMPLATES: readonly CardTemplate[] = [
     },
   },
 
+  // D4 ── Utsav: wide (landscape) artwork public/art/utsav.jpg across the top
+  {
+    id: 'utsav',
+    name: { ne: 'उत्सव', en: 'Utsav' },
+    style: 'traditional',
+    days: ['dashain', 'bijaya-dashami', 'kojagrat-purnima', 'fulpati'],
+    palette: CREAM,
+    background: [
+      { kind: 'sun-rays', cx: 540, cy: 860, r: 1000, color: '#F4D9A4', opacity: 0.45, count: 48 },
+      { kind: 'border', inset: 34, color: CREAM.primary, width: 5, double: true, corners: true },
+      { kind: 'grain', opacity: 0.05 },
+      { kind: 'image', src: 'art/utsav.jpg', x: 130, y: 96, width: 820, height: 547, fit: 'contain', frame: { color: CREAM.gold, width: 10 } },
+      { kind: 'jamara', x: 120, y: 1300, width: 130, height: 240, color: '#C3D35A', count: 28 },
+      { kind: 'jamara', x: 960, y: 1300, width: 130, height: 240, color: '#C3D35A', count: 28 },
+    ],
+    photo: { shape: 'circle', cx: 540, cy: 815, width: 260, height: 260, border: { color: CREAM.gold, width: 9, double: true } },
+    foreground: [
+      { kind: 'marigold', x: 360, y: 840, r: 32, color: '#F59E0B' },
+      { kind: 'marigold', x: 720, y: 840, r: 32, color: '#EA580C' },
+    ],
+    text: {
+      greeting: { x: 150, y: 975, width: 780, fontSize: 52, align: 'center', font: 'display', color: CREAM.text },
+      subline: { x: 200, y: 1100, width: 680, fontSize: 24, align: 'center', font: 'body', color: CREAM.subtext },
+      from: { x: 200, y: 1190, width: 680, fontSize: 28, align: 'center', font: 'script', color: CREAM.primary },
+    },
+  },
+
   // D2 ── Ashirbad: cream, smaller shrine panel, photo centred below
   {
     id: 'ashirbad',
