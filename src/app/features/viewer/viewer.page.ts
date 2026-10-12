@@ -30,6 +30,7 @@ import { ShareService } from './share.service';
             <div class="sm:flex-1">
               <p class="heading text-2xl">{{ i18n.t('viewer.ready') }}</p>
               <p class="text-sm text-cream/90">{{ i18n.t('viewer.readyHint') }}</p>
+              <p class="mt-1 text-xs text-cream/80">⏳ {{ i18n.t('viewer.lifetime') }}</p>
             </div>
             <button type="button" class="btn-gold text-lg" (click)="shareNow(c)">↗ {{ i18n.t('viewer.shareLink') }}</button>
           </div>

@@ -90,6 +90,10 @@ export const T = {
   'viewer.makeMine': { ne: 'यसलाई मेरो बनाउनुहोस्', en: 'Make it mine' },
   'viewer.makeMineHint': { ne: 'यही डिजाइनमा आफ्नो फोटो राख्नुहोस्', en: 'Use this design with your own photo' },
   'viewer.share': { ne: 'साझा गर्नुहोस्', en: 'Share' },
+  'viewer.lifetime': {
+    ne: 'यो कार्डको लिङ्क १५ दिनसम्म चल्छ — दशैंभरि साझा गर्नुहोस्!',
+    en: 'This card’s link stays live for 15 days — share it all through Dashain!',
+  },
   'viewer.shareLink': { ne: 'साझा गर्नुहोस्', en: 'Share' },
   'viewer.shareHint': {
     ne: 'लिङ्क साझा गर्दा साथीहरूले कार्ड देख्छन् र थिचेर आफ्नै कार्ड बनाउन सक्छन्।',
@@ -103,7 +107,7 @@ export const T = {
   'viewer.from': { ne: 'पठाउने', en: 'From' },
   'viewer.remixes': { ne: 'जनाले यो डिजाइन आफ्नो बनाए', en: 'people made this design their own' },
   'viewer.report': { ne: 'रिपोर्ट गर्नुहोस्', en: 'Report' },
-  'viewer.notFound': { ne: 'यो कार्ड भेटिएन वा हटाइएको छ।', en: 'This card was not found or has been removed.' },
+  'viewer.notFound': { ne: 'यो कार्ड भेटिएन — हटाइएको वा १५ दिन पुगेर सकिएको हुन सक्छ।', en: 'This card wasn’t found — it may have been removed, or its 15 days are up.' },
   'viewer.shareText': { ne: 'तपाईंका लागि दशैंको शुभकामना 🙏', en: 'Dashain wishes for you 🙏' },
 
   'report.title': { ne: 'यो कार्ड रिपोर्ट गर्नुहोस्', en: 'Report this card' },

@@ -65,7 +65,7 @@ service cloud.firestore {
              'ownerUid', 'ownerName', 'dayId', 'templateId', 'text', 'visibility',
              'imagePath', 'imageUrl', 'thumbUrl', 'ogUrl', 'width', 'height',
              'remixOf', 'rootId', 'remixCount', 'reportCount', 'status',
-             'createdAt', 'schemaVersion'])
+             'createdAt', 'expireAt', 'schemaVersion'])
         && request.resource.data.keys().hasAll([
              'ownerUid', 'dayId', 'templateId', 'text', 'visibility', 'imagePath',
              'imageUrl', 'thumbUrl', 'status', 'createdAt', 'remixCount', 'reportCount'])
@@ -83,7 +83,11 @@ service cloud.firestore {
         && request.resource.data.status == 'active'
         && request.resource.data.remixCount == 0
         && request.resource.data.reportCount == 0
-        && request.resource.data.createdAt == request.time;
+        && request.resource.data.createdAt == request.time
+        // Auto-delete after ~15 days (TTL policy on expireAt). Allow a day of clock skew.
+        && request.resource.data.expireAt is timestamp
+        && request.resource.data.expireAt > request.time + duration.value(14, 'd')
+        && request.resource.data.expireAt < request.time + duration.value(16, 'd');
 
       // Owner may only change visibility.
       allow update: if isUser(resource.data.ownerUid)

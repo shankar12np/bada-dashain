@@ -63,7 +63,8 @@ export const cardPage = onRequest({ concurrency: 80, invoker: 'public' }, async 
     const snap = id ? await db.doc(`cards/${id}`).get() : null;
     const card = snap?.exists ? snap.data()! : null;
     logger.info('cardPage', { id, found: !!card, status: card?.status, ua: req.get('user-agent') });
-    if (card && card.status === 'active') {
+    const expired = card?.expireAt ? card.expireAt.toMillis() <= Date.now() : false;
+    if (card && card.status === 'active' && !expired) {
       const title = esc(`${card.text.greeting} · Tika`);
       const desc = esc(card.text.subline ?? 'Make this Dashain card your own — टीका');
       const img = esc(card.ogUrl ?? card.imageUrl);

@@ -43,7 +43,28 @@ export interface CardDoc {
   reportCount: number;
   status: CardStatus;
   createdAt: Timestamp;
+  /** When the card deletes itself (Firestore TTL policy). See CARD_LIFETIME_DAYS. */
+  expireAt?: Timestamp;
   schemaVersion: 1;
+}
+
+/**
+ * Cards clean themselves up this many days after they are made (the festival is over):
+ *  • Firestore deletes the record via a TTL policy on `expireAt` (firestore.indexes.json)
+ *  • Cloud Storage deletes the images via a bucket lifecycle rule (storage-lifecycle.json)
+ */
+export const CARD_LIFETIME_DAYS = 15;
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+/** True once a card is past its lifetime (TTL deletion can lag up to ~24h, so check ourselves). */
+export function isExpired(card: Pick<CardDoc, 'createdAt' | 'expireAt'>, now = Date.now()): boolean {
+  const end = card.expireAt?.toMillis() ?? (card.createdAt ? card.createdAt.toMillis() + CARD_LIFETIME_DAYS * DAY_MS : Infinity);
+  return now >= end;
+}
+
+/** Oldest createdAt that is still within the lifetime. */
+export function lifetimeStart(now = Date.now()): Date {
+  return new Date(now - CARD_LIFETIME_DAYS * DAY_MS);
 }
 
 /** A card doc together with its id — what components work with. */

@@ -11,6 +11,7 @@ import {
   serverTimestamp,
   setDoc,
   startAfter,
+  Timestamp,
   updateDoc,
   where,
   type DocumentData,
@@ -20,7 +21,7 @@ import {
 } from 'firebase/firestore';
 import { deleteObject, getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { FIRESTORE, STORAGE } from '../../core/firebase/firestore';
-import type { Card, CardDoc, CardText, CardVisibility } from '../../models/card.model';
+import { CARD_LIFETIME_DAYS, isExpired, lifetimeStart, type Card, type CardDoc, type CardText, type CardVisibility } from '../../models/card.model';
 import type { DayId } from '../../models/festival.model';
 import type { CardExports } from '../render/card-render.service';
 
@@ -99,6 +100,8 @@ export class CardRepository {
       reportCount: 0,
       status: 'active',
       createdAt: serverTimestamp(),
+      // Firestore's TTL policy deletes the record after this time.
+      expireAt: Timestamp.fromMillis(Date.now() + CARD_LIFETIME_DAYS * 24 * 60 * 60 * 1000),
       schemaVersion: 1,
     };
     await setDoc(doc(this.db, 'cards', input.cardId), data);
@@ -108,7 +111,10 @@ export class CardRepository {
   async get(id: string): Promise<Card | null> {
     try {
       const snap = await getDoc(doc(this.db, 'cards', id));
-      return snap.exists() ? ({ id: snap.id, ...(snap.data() as CardDoc) } as Card) : null;
+      if (!snap.exists()) return null;
+      const card = { id: snap.id, ...(snap.data() as CardDoc) } as Card;
+      // Past its 15 days: treat as gone even if the TTL hasn't run yet (images may already be deleted).
+      return isExpired(card) ? null : card;
     } catch (e) {
       // permission-denied == hidden by moderation or bad id.
       if ((e as { code?: string }).code === 'permission-denied') return null;
@@ -120,6 +126,8 @@ export class CardRepository {
   async listPublic(day: DayId | null, cursor: QueryDocumentSnapshot | null = null): Promise<Page> {
     const c: QueryConstraint[] = [where('visibility', '==', 'public'), where('status', '==', 'active')];
     if (day) c.push(where('dayId', '==', day));
+    // Only cards still within their lifetime (same field as orderBy → existing indexes still apply).
+    c.push(where('createdAt', '>', Timestamp.fromDate(lifetimeStart())));
     c.push(orderBy('createdAt', 'desc'));
     if (cursor) c.push(startAfter(cursor));
     c.push(limit(PAGE_SIZE));
@@ -127,7 +135,11 @@ export class CardRepository {
   }
 
   async listMine(uid: string, cursor: QueryDocumentSnapshot | null = null): Promise<Page> {
-    const c: QueryConstraint[] = [where('ownerUid', '==', uid), orderBy('createdAt', 'desc')];
+    const c: QueryConstraint[] = [
+      where('ownerUid', '==', uid),
+      where('createdAt', '>', Timestamp.fromDate(lifetimeStart())),
+      orderBy('createdAt', 'desc'),
+    ];
     if (cursor) c.push(startAfter(cursor));
     c.push(limit(PAGE_SIZE));
     return this.page(query(collection(this.db, 'cards'), ...c));

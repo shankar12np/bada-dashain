@@ -46,3 +46,14 @@ WhatsApp. The gallery may show an error for a few minutes while Firestore builds
 ## Updating later
 After changing code: `npm run deploy:web` (and `npm run deploy:rules` / `deploy:functions`
 only if you changed those files).
+
+## Auto-delete after 15 days
+* Firestore: `npm run deploy:rules` turns on the TTL policy for `cards.expireAt`
+  (set by the app to 15 days after creation). Deletion runs within ~24h of expiry.
+* Storage: one-time bucket lifecycle rule (Cloud Shell):
+  ```bash
+  gcloud storage buckets update gs://bada-dashain.firebasestorage.app --lifecycle-file=storage-lifecycle.json
+  ```
+  (paste the contents of `storage-lifecycle.json` into Cloud Shell first).
+To change the lifetime, update `CARD_LIFETIME_DAYS` (card.model.ts), the 14/16-day window in
+firestore.rules, and `age` in storage-lifecycle.json together.
