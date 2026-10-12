@@ -236,6 +236,12 @@ export class EditorPage {
     return fillGreeting(g.greeting[this.cardLang()], this.cardLang());
   }
 
+  /** First line of the blessing, so suggestions with the same greeting are distinguishable. */
+  protected sublinePreview(g: Greeting): string | null {
+    const sub = g.subline?.[this.cardLang()];
+    return sub ? fillGreeting(sub.split('\n')[0], this.cardLang()) : null;
+  }
+
   // ── output ──────────────────────────────────────────────────────────────
   protected async download(): Promise<void> {
     if (!this.scene) return;

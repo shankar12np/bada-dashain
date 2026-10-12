@@ -402,7 +402,8 @@ export class CardScene {
     let bottom = g.y() + g.height();
     if (text.subline) {
       // The blessing always sits right under the greeting, however many lines it took.
-      const s = make(slots.subline, text.subline, bottom + 14, 3);
+      // Shlokas keep their own line breaks, so allow as many lines as the verse has (min 3).
+      const s = make(slots.subline, text.subline, bottom + 14, Math.max(3, text.subline.split('\n').length));
       bottom = s.y() + s.height();
     }
     if (text.from) {

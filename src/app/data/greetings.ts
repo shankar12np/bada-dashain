@@ -49,6 +49,54 @@ export const GREETINGS: readonly Greeting[] = [
     },
   },
 
+  {
+    id: 'pariwar-sukh',
+    days: ['dashain'],
+    greeting: {
+      ne: 'खुसियालीले भरिएको दशैंको शुभकामना!',
+      en: 'Wishing you a Dashain full of joy!',
+    },
+    subline: {
+      ne: 'यस पावन अवसरमा तपाईं र तपाईंको सम्पूर्ण परिवारमा सुख, शान्ति तथा समृद्धिको हार्दिक कामना गर्दछु।',
+      en: 'On this sacred occasion, I wish you and your whole family happiness, peace and prosperity.',
+    },
+  },
+  {
+    id: 'casual',
+    days: ['dashain'],
+    greeting: {
+      ne: 'दशैंको धेरै शुभकामना!',
+      en: 'Happy Dashain 🫰🏻💕',
+    },
+  },
+
+  // ── Tika blessings (ashirbad) — used on Dashami and through Purnima ──────
+  {
+    id: 'surya-chandra',
+    days: ['bijaya-dashami', 'kojagrat-purnima', 'dashain'],
+    greeting: {
+      ne: 'विजया दशमीको हार्दिक शुभकामना',
+      en: 'Happy Bijaya Dashami',
+    },
+    subline: {
+      ne: 'सूर्य चन्द्र जति रहोस्, गंगा झरेझैं सम्पन्नता आओस्, सबै काममा विजय प्राप्त होस्।',
+      en: 'May you endure like the sun and the moon, may prosperity flow like the Ganga, and may you find victory in every endeavour.',
+    },
+  },
+  {
+    // Traditional tika blessing, customarily recited for sons and men.
+    id: 'ayu-dronasute',
+    days: ['bijaya-dashami', 'kojagrat-purnima', 'dashain'],
+    greeting: {
+      ne: 'विजया दशमीको आशीर्वाद',
+      en: 'Bijaya Dashami blessings',
+    },
+    subline: {
+      ne: 'आयु द्रोणसुते श्रियं दशरथे शत्रुक्षयं राघवे।\nऐश्वर्यं नहुषे गतिश्च पवने मानञ्च दुर्योधने।\nशौर्यं शान्तनवे बलं हलधरे सत्यञ्च कुन्तीसुते।\nविज्ञानं विदुरे भवन्तु भवतां कीर्तिश्च नारायणे॥',
+      en: 'May you have the long life of Ashwatthama, the wealth of Dasharatha, the valour of Bhishma, the strength of Balarama, the truthfulness of Yudhishthira, the wisdom of Vidura and the fame of Narayana.',
+    },
+  },
+
   // ── Ghatasthapana ────────────────────────────────────────────────────────
   {
     id: 'ghatasthapana-1',
@@ -146,7 +194,7 @@ export const GREETINGS: readonly Greeting[] = [
   },
   {
     id: 'dashami-tika',
-    days: ['bijaya-dashami'],
+    days: ['bijaya-dashami', 'kojagrat-purnima', 'dashain'],
     greeting: {
       ne: 'विजया दशमीको हार्दिक शुभकामना',
       en: 'Bijaya Dashami ko hardik shubhakamana',

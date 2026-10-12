@@ -123,7 +123,10 @@
                           class="rounded-xl border px-4 py-2.5 text-left transition hover:bg-cream"
                           [class.border-sindoor]="greetingId() === g.id" [class.bg-cream]="greetingId() === g.id"
                           [class.border-gold]="greetingId() !== g.id">
-                    {{ suggestionLabel(g) }}
+                    <span class="block">{{ suggestionLabel(g) }}</span>
+                    @if (sublinePreview(g); as sub) {
+                      <span class="mt-0.5 block truncate text-xs text-ink-soft">{{ sub }}</span>
+                    }
                   </button>
                 }
               </div>
