@@ -125,7 +125,7 @@ export const TEMPLATES: readonly CardTemplate[] = [
     id: 'tika-thali',
     name: { ne: 'टीका थाली', en: 'Tika Thali' },
     style: 'traditional',
-    days: ['bijaya-dashami', 'kojagrat-purnima', 'dashain'],
+    days: ['bijaya-dashami'],
     palette: ROYAL,
     background: [
       { kind: 'sun-rays', cx: 540, cy: 360, r: 1000, color: ROYAL.gold, opacity: 0.08, count: 40 },
@@ -153,7 +153,7 @@ export const TEMPLATES: readonly CardTemplate[] = [
     id: 'utsav',
     name: { ne: 'उत्सव', en: 'Utsav' },
     style: 'traditional',
-    days: ['dashain', 'bijaya-dashami', 'kojagrat-purnima', 'fulpati'],
+    days: ['bijaya-dashami'],
     palette: CREAM,
     background: [
       { kind: 'sun-rays', cx: 540, cy: 860, r: 1000, color: '#F4D9A4', opacity: 0.45, count: 48 },
@@ -180,7 +180,7 @@ export const TEMPLATES: readonly CardTemplate[] = [
     id: 'ashirbad',
     name: { ne: 'आशीर्वाद', en: 'Ashirbad' },
     style: 'traditional',
-    days: ['bijaya-dashami', 'fulpati', 'maha-ashtami', 'maha-navami', 'navaratri', 'dashain'],
+    days: ['bijaya-dashami', 'maha-ashtami', 'maha-navami', 'navaratri', 'dashain'],
     palette: CREAM,
     background: [
       { kind: 'sun-rays', cx: 540, cy: 330, r: 900, color: '#F4D9A4', opacity: 0.5, count: 48 },
