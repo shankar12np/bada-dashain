@@ -42,8 +42,13 @@ async function getIndexHtml(origin: string): Promise<string> {
 const esc = (s: string) =>
   s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
 
-export const cardPage = onRequest({ concurrency: 80 }, async (req, res) => {
-  const origin = `https://${req.get('x-forwarded-host') ?? req.hostname}`;
+// invoker: 'public' — Facebook, X, WhatsApp etc. fetch the link without logging in.
+export const cardPage = onRequest({ concurrency: 80, invoker: 'public' }, async (req, res) => {
+  const host = req.get('x-forwarded-host') ?? req.hostname;
+  // Calls straight to the function URL (not via Hosting) can't fetch the shell from themselves.
+  const origin = host.endsWith('.cloudfunctions.net') || host.endsWith('.run.app')
+    ? 'https://bada-dashain.web.app'
+    : `https://${host}`;
   const id = (req.path.split('/')[2] ?? '').replace(/[^A-Za-z0-9]/g, '').slice(0, 40);
   let html: string;
   try {
@@ -57,6 +62,7 @@ export const cardPage = onRequest({ concurrency: 80 }, async (req, res) => {
   try {
     const snap = id ? await db.doc(`cards/${id}`).get() : null;
     const card = snap?.exists ? snap.data()! : null;
+    logger.info('cardPage', { id, found: !!card, status: card?.status, ua: req.get('user-agent') });
     if (card && card.status === 'active') {
       const title = esc(`${card.text.greeting} · Tika`);
       const desc = esc(card.text.subline ?? 'Make this Dashain card your own — टीका');
@@ -72,7 +78,10 @@ export const cardPage = onRequest({ concurrency: 80 }, async (req, res) => {
         `<meta property="og:image:height" content="630">`,
         `<meta property="og:url" content="${url}">`,
         `<meta property="og:type" content="website">`,
+        `<meta property="og:image:type" content="image/jpeg">`,
         `<meta name="twitter:card" content="summary_large_image">`,
+        `<meta name="twitter:title" content="${title}">`,
+        `<meta name="twitter:description" content="${desc}">`,
         `<meta name="twitter:image" content="${img}">`,
       ].join('\n    ');
       // Drop the default tags from the shell, then inject the card's own.
@@ -84,6 +93,8 @@ export const cardPage = onRequest({ concurrency: 80 }, async (req, res) => {
   } catch (e) {
     logger.warn('card lookup failed', { id, e });
   }
+
+  html = html.replace(/content="\/og-default\.jpg"/g, `content="${origin}/og-default.jpg"`);
 
   // CDN-cache at the edge; cards are immutable so this is safe.
   res.set('Cache-Control', 'public, max-age=300, s-maxage=3600');
