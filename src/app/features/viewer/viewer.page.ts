@@ -26,9 +26,12 @@ import { ShareService } from './share.service';
         </div>
       } @else if (card(); as c) {
         @if (isNew()) {
-          <div class="mb-6 rounded-2xl bg-jamara p-4 text-cream">
-            <p class="heading text-2xl">{{ i18n.t('viewer.ready') }}</p>
-            <p class="text-sm text-cream/90">{{ i18n.t('viewer.readyHint') }}</p>
+          <div class="mb-6 flex flex-col gap-3 rounded-2xl bg-jamara p-4 text-cream sm:flex-row sm:items-center">
+            <div class="sm:flex-1">
+              <p class="heading text-2xl">{{ i18n.t('viewer.ready') }}</p>
+              <p class="text-sm text-cream/90">{{ i18n.t('viewer.readyHint') }}</p>
+            </div>
+            <button type="button" class="btn-gold text-lg" (click)="shareNow(c)">↗ {{ i18n.t('viewer.shareLink') }}</button>
           </div>
         }
 
@@ -57,19 +60,19 @@ import { ShareService } from './share.service';
               <p class="mt-1 text-sm text-ink-soft">↻ {{ i18n.num(c.remixCount) }} {{ i18n.t('viewer.remixes') }}</p>
             }
 
-            <!-- Share -->
+            <!-- Share: always the clickable link, never a dead-end image -->
             <div class="mt-8 border-t border-gold/30 pt-6">
               <h2 class="label">{{ i18n.t('viewer.share') }}</h2>
+              <p class="mb-3 text-xs text-ink-soft">{{ i18n.t('viewer.shareHint') }}</p>
               <div class="flex flex-wrap gap-2">
-                @if (share.canNativeShare) {
-                  <button type="button" class="btn-primary" (click)="share.shareLink(c)">↗ {{ i18n.t('viewer.share') }}</button>
-                  <button type="button" class="btn-ghost" (click)="share.shareImage(c)">🖼 WhatsApp Status / Story</button>
-                }
-                <a class="btn-ghost" [href]="share.whatsappUrl(c)" target="_blank" rel="noopener">{{ i18n.t('viewer.whatsapp') }}</a>
-                <a class="btn-ghost" [href]="share.facebookUrl(c)" target="_blank" rel="noopener">{{ i18n.t('viewer.facebook') }}</a>
-                <a class="btn-ghost" [href]="share.viberUrl(c)">{{ i18n.t('viewer.viber') }}</a>
+                <button type="button" class="btn-primary" (click)="shareNow(c)">↗ {{ i18n.t('viewer.shareLink') }}</button>
+                <a class="btn-ghost" [href]="share.whatsappUrl(c)" target="_blank" rel="noopener">WhatsApp</a>
+                <a class="btn-ghost" [href]="share.facebookUrl(c)" target="_blank" rel="noopener">Facebook</a>
+                <a class="btn-ghost" [href]="share.messengerUrl(c)" target="_blank" rel="noopener">Messenger</a>
+                <a class="btn-ghost" [href]="share.viberUrl(c)">Viber</a>
+                <a class="btn-ghost" [href]="share.telegramUrl(c)" target="_blank" rel="noopener">Telegram</a>
+                <a class="btn-ghost" [href]="share.xUrl(c)" target="_blank" rel="noopener">X</a>
                 <button type="button" class="btn-ghost" (click)="share.copy(share.url(c))">🔗 {{ i18n.t('viewer.copy') }}</button>
-                <button type="button" class="btn-ghost" (click)="share.download(c)">⬇ {{ i18n.t('editor.download') }}</button>
               </div>
             </div>
 
@@ -109,6 +112,11 @@ export class ViewerPage {
       const id = this.id();
       untracked(() => void this.load(id));
     });
+  }
+
+  /** Native share sheet (lists every app on the phone); copies the link elsewhere. */
+  protected shareNow(card: Card): void {
+    void this.share.shareLink(card);
   }
 
   private async load(id: string): Promise<void> {

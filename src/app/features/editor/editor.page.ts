@@ -243,11 +243,6 @@ export class EditorPage {
   }
 
   // ── output ──────────────────────────────────────────────────────────────
-  protected async download(): Promise<void> {
-    if (!this.scene) return;
-    await this.render.downloadPng(this.scene, `tika-${this.day()}.png`);
-  }
-
   protected async save(): Promise<void> {
     if (!this.scene || this.saving()) return;
     if (!this.photo()) {
