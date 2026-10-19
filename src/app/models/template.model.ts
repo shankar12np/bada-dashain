@@ -29,7 +29,7 @@ export interface Palette {
   subtext: string;
 }
 
-export type PhotoShape = 'circle' | 'arch' | 'rounded' | 'diamond-arch';
+export type PhotoShape = 'circle' | 'arch' | 'rounded' | 'diamond-arch' | 'rect';
 
 export interface PhotoFrame {
   shape: PhotoShape;
@@ -38,8 +38,10 @@ export interface PhotoFrame {
   cy: number;
   width: number;
   height: number;
-  /** Decorative ring/border around the photo. */
+  /** Decorative ring/border around the photo. Width 0 = none (full-bleed posters). */
   border: { color: string; width: number; double?: boolean };
+  /** Golden glow behind the frame (default on). Off for full-bleed posters. */
+  halo?: boolean;
 }
 
 export interface TextSlot {
@@ -86,7 +88,15 @@ export type Layer =
       /** 'contain' keeps the artwork's own shape inside the box (never cropped or stretched). */
       fit?: 'fill' | 'contain';
     }
-  | { kind: 'grain'; opacity: number };
+  | { kind: 'grain'; opacity: number }
+  /** Vertical colour fade, e.g. dark at the bottom so text reads over a photo. */
+  | { kind: 'fade'; y0: number; y1: number; stops: [number, string][] }
+  /** Darkened edges that pull the eye to the middle of the photo. */
+  | { kind: 'vignette'; strength: number; color?: string }
+  /** Warm festival light washed over a corner of the photo (screen blend). */
+  | { kind: 'light-leak'; x: number; y: number; r: number; color: string; opacity: number }
+  /** Floating golden light orbs and sparkles. */
+  | { kind: 'bokeh'; count: number; colors: string[]; area?: { x: number; y: number; w: number; h: number }; seed?: number };
 
 export interface CardTemplate {
   id: string;

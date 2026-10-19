@@ -84,8 +84,126 @@ function textBlock(y: number, color: string, sub: string, opts: Partial<TextSlot
 }
 
 const ALL: DayId[] = ['dashain'];
+/** Every festival day — used by designs that should be offered first everywhere. */
+const EVERY: DayId[] = ['dashain', 'ghatasthapana', 'navaratri', 'fulpati', 'maha-ashtami', 'maha-navami', 'bijaya-dashami', 'kojagrat-purnima'];
 
 export const TEMPLATES: readonly CardTemplate[] = [
+  // ── Poster designs: the person's photo fills the whole card ─────────────────
+  // Festive light, garlands and gold are layered OVER the photo, and the greeting
+  // sits on a soft dark fade at the bottom so it always reads clearly.
+
+  // P1 ── Vijaya Utsav: full-bleed photo, warm festival glow, marigold garland
+  {
+    id: 'vijaya-poster',
+    name: { ne: 'विजय उत्सव', en: 'Vijaya Utsav' },
+    style: 'traditional',
+    days: EVERY,
+    palette: ROYAL,
+    background: [],
+    photo: { shape: 'rect', cx: 540, cy: 675, width: 1080, height: 1350, border: { color: ROYAL.gold, width: 0 }, halo: false },
+    foreground: [
+      { kind: 'light-leak', x: 1000, y: 110, r: 560, color: 'rgba(255,176,64,1)', opacity: 0.5 },
+      { kind: 'light-leak', x: 60, y: 1180, r: 460, color: 'rgba(255,96,40,1)', opacity: 0.32 },
+      { kind: 'vignette', strength: 0.42 },
+      { kind: 'fade', y0: 0, y1: 300, stops: [[0, 'rgba(58,5,10,0.85)'], [1, 'rgba(58,5,10,0)']] },
+      { kind: 'fade', y0: 780, y1: 1350, stops: [[0, 'rgba(50,4,8,0)'], [0.45, 'rgba(50,4,8,0.78)'], [1, 'rgba(38,3,6,0.97)']] },
+      { kind: 'bokeh', count: 46, colors: ['rgba(255,214,120,0.9)', 'rgba(255,170,70,0.8)', 'rgba(255,242,205,0.95)'], area: { x: 0, y: 70, w: 1080, h: 300 }, seed: 5 },
+      { kind: 'garland', y: 44, sag: 64, color: '#F59E0B', leaf: '#4D7C0F' },
+      { kind: 'border', inset: 26, color: ROYAL.gold, width: 3, double: true, corners: true },
+      { kind: 'diyo', x: 125, y: 1258, size: 38, color: '#B45309', flame: '#F59E0B' },
+      { kind: 'diyo', x: 955, y: 1258, size: 38, color: '#B45309', flame: '#F59E0B' },
+    ],
+    text: {
+      greeting: { x: 90, y: 955, width: 900, fontSize: 66, align: 'center', font: 'display', color: '#F7D88B', shadow: true },
+      subline: { x: 130, y: 1100, width: 820, fontSize: 28, align: 'center', font: 'body', color: '#FBF3E4', shadow: true },
+      from: { x: 130, y: 1205, width: 820, fontSize: 32, align: 'center', font: 'script', color: '#F7D88B', shadow: true },
+    },
+  },
+
+  // P2 ── Swarna Dwar: a grand golden arch, the photo almost the full card
+  {
+    id: 'swarna-dwar',
+    name: { ne: 'स्वर्ण द्वार', en: 'Swarna Dwar' },
+    style: 'traditional',
+    days: EVERY,
+    palette: ROYAL,
+    background: [
+      { kind: 'sun-rays', cx: 540, cy: 560, r: 1100, color: ROYAL.gold, opacity: 0.1, count: 44 },
+      { kind: 'mandala', cx: 540, cy: 560, r: 540, color: ROYAL.gold, opacity: 0.14, petals: 24 },
+      { kind: 'pattern-dhaka', y: 1310, height: 40, colors: ['#3F050B', ROYAL.primary, ROYAL.gold, ROYAL.accent] },
+    ],
+    photo: { shape: 'arch', cx: 540, cy: 548, width: 900, height: 950, border: { color: ROYAL.gold, width: 12, double: true } },
+    foreground: [
+      { kind: 'light-leak', x: 900, y: 160, r: 420, color: 'rgba(255,190,80,1)', opacity: 0.35 },
+      { kind: 'bokeh', count: 26, colors: ['rgba(255,220,130,0.9)', 'rgba(255,245,210,0.95)'], area: { x: 40, y: 40, w: 1000, h: 300 }, seed: 9 },
+      { kind: 'garland', y: 70, sag: 40, color: '#F59E0B', leaf: '#4D7C0F' },
+      { kind: 'marigold', x: 90, y: 1010, r: 38, color: '#F59E0B' },
+      { kind: 'marigold', x: 990, y: 1010, r: 38, color: '#EA580C' },
+      { kind: 'diyo', x: 95, y: 1150, size: 34, color: '#B45309', flame: '#F59E0B' },
+      { kind: 'diyo', x: 985, y: 1150, size: 34, color: '#B45309', flame: '#F59E0B' },
+    ],
+    text: {
+      greeting: { x: 150, y: 1072, width: 780, fontSize: 52, align: 'center', font: 'display', color: ROYAL.text },
+      subline: { x: 170, y: 1160, width: 740, fontSize: 23, align: 'center', font: 'body', color: ROYAL.subtext },
+      from: { x: 170, y: 1235, width: 740, fontSize: 28, align: 'center', font: 'script', color: ROYAL.text },
+    },
+  },
+
+  // P3 ── Deep Jyoti: full-bleed photo at night, a row of diyos, lots of glow
+  {
+    id: 'deep-jyoti',
+    name: { ne: 'दीप ज्योति', en: 'Deep Jyoti' },
+    style: 'traditional',
+    days: EVERY,
+    palette: NIGHT,
+    background: [],
+    photo: { shape: 'rect', cx: 540, cy: 675, width: 1080, height: 1350, border: { color: NIGHT.gold, width: 0 }, halo: false },
+    foreground: [
+      { kind: 'vignette', strength: 0.7, color: '20,4,6' },
+      { kind: 'light-leak', x: 540, y: 1350, r: 700, color: 'rgba(255,140,40,1)', opacity: 0.45 },
+      { kind: 'fade', y0: 760, y1: 1350, stops: [[0, 'rgba(20,4,6,0)'], [0.5, 'rgba(20,4,6,0.8)'], [1, 'rgba(14,3,4,0.96)']] },
+      { kind: 'bokeh', count: 40, colors: ['rgba(255,200,100,0.85)', 'rgba(255,150,60,0.75)', 'rgba(255,240,200,0.9)'], area: { x: 0, y: 40, w: 1080, h: 330 }, seed: 21 },
+      { kind: 'bokeh', count: 18, colors: ['rgba(255,190,90,0.8)', 'rgba(255,240,200,0.9)'], area: { x: 0, y: 880, w: 1080, h: 360 }, seed: 8 },
+      { kind: 'border', inset: 30, color: NIGHT.gold, width: 2, double: true },
+      { kind: 'diyo', x: 170, y: 1262, size: 34, color: '#9A3412', flame: '#F59E0B' },
+      { kind: 'diyo', x: 340, y: 1268, size: 30, color: '#9A3412', flame: '#F59E0B' },
+      { kind: 'diyo', x: 740, y: 1268, size: 30, color: '#9A3412', flame: '#F59E0B' },
+      { kind: 'diyo', x: 910, y: 1262, size: 34, color: '#9A3412', flame: '#F59E0B' },
+    ],
+    text: {
+      greeting: { x: 90, y: 965, width: 900, fontSize: 64, align: 'center', font: 'display', color: '#F7D88B', shadow: true },
+      subline: { x: 130, y: 1105, width: 820, fontSize: 27, align: 'center', font: 'body', color: '#F3E7D3', shadow: true },
+      from: { x: 130, y: 1195, width: 820, fontSize: 32, align: 'center', font: 'script', color: '#F7D88B', shadow: true },
+    },
+  },
+
+  // P4 ── Jamara Prabhat: photo fills the top, melting into cream with jamara
+  {
+    id: 'jamara-prabhat',
+    name: { ne: 'जमरा प्रभात', en: 'Jamara Prabhat' },
+    style: 'traditional',
+    days: EVERY,
+    palette: { ...CREAM, bg: ['#FFF9EE', '#FBEFD9'] },
+    background: [],
+    photo: { shape: 'rect', cx: 540, cy: 500, width: 1080, height: 1000, border: { color: CREAM.gold, width: 0 }, halo: false },
+    foreground: [
+      { kind: 'light-leak', x: 80, y: 80, r: 520, color: 'rgba(255,200,110,1)', opacity: 0.45 },
+      { kind: 'fade', y0: 600, y1: 1000, stops: [[0, 'rgba(255,249,238,0)'], [0.7, 'rgba(255,249,238,0.85)'], [1, 'rgba(255,249,238,1)']] },
+      { kind: 'fade', y0: 1000, y1: 1350, stops: [[0, 'rgba(255,249,238,1)'], [1, 'rgba(251,239,217,1)']] },
+      { kind: 'bokeh', count: 22, colors: ['rgba(255,225,150,0.9)', 'rgba(255,250,230,0.95)'], area: { x: 0, y: 60, w: 1080, h: 280 }, seed: 3 },
+      { kind: 'toran', y: 24, colors: ['#3F6212', '#F59E0B', '#7C2D12'] },
+      { kind: 'border', inset: 22, color: CREAM.primary, width: 4, double: true, corners: true },
+      { kind: 'jamara', x: 110, y: 1300, width: 140, height: 300, color: '#C3D35A', count: 32 },
+      { kind: 'jamara', x: 970, y: 1300, width: 140, height: 300, color: '#C3D35A', count: 32 },
+      { kind: 'tika', x: 540, y: 905, r: 16, color: '#C1121F' },
+    ],
+    text: {
+      greeting: { x: 170, y: 935, width: 740, fontSize: 60, align: 'center', font: 'display', color: CREAM.text },
+      subline: { x: 200, y: 1080, width: 680, fontSize: 26, align: 'center', font: 'body', color: CREAM.subtext },
+      from: { x: 200, y: 1190, width: 680, fontSize: 30, align: 'center', font: 'script', color: CREAM.primary },
+    },
+  },
+
   // ── Devotional templates (artwork: public/art/durga.jpg) ───────────────────
   // Layout rule: the Goddess is always framed on her own, at the top, never
   // cropped and never overlapped by the user's photo or by text.

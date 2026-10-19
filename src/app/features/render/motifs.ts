@@ -771,6 +771,86 @@ async function imageLayer(l: Extract<Layer, { kind: 'image' }>): Promise<Konva.G
   return g;
 }
 
+// ─── poster effects (drawn over full-bleed photos) ─────────────────────────
+
+function fade(w: number, y0: number, y1: number, stops: [number, string][]): Konva.Shape {
+  return paint((c) => {
+    const g = c.createLinearGradient(0, y0, 0, y1);
+    for (const [at, col] of stops) g.addColorStop(at, col);
+    c.fillStyle = g;
+    c.fillRect(0, Math.min(y0, y1), w, Math.abs(y1 - y0));
+  });
+}
+
+function vignette(w: number, h: number, strength: number, color = '0,0,0'): Konva.Shape {
+  return paint((c) => {
+    const g = c.createRadialGradient(w / 2, h * 0.45, Math.min(w, h) * 0.35, w / 2, h * 0.45, Math.hypot(w, h) * 0.62);
+    g.addColorStop(0, `rgba(${color},0)`);
+    g.addColorStop(1, `rgba(${color},${strength})`);
+    c.fillStyle = g;
+    c.fillRect(0, 0, w, h);
+  });
+}
+
+function lightLeak(x: number, y: number, r: number, color: string, opacity: number): Konva.Shape {
+  return paint((c) => {
+    c.globalCompositeOperation = 'screen';
+    const g = c.createRadialGradient(x, y, 0, x, y, r);
+    g.addColorStop(0, color);
+    g.addColorStop(1, 'rgba(0,0,0,0)');
+    c.fillStyle = g;
+    c.beginPath();
+    c.arc(x, y, r, 0, Math.PI * 2);
+    c.fill();
+  }, opacity);
+}
+
+function bokeh(
+  w: number,
+  h: number,
+  count: number,
+  colors: string[],
+  area = { x: 0, y: 0, w, h },
+  seed = 11,
+): Konva.Shape {
+  return paint((c) => {
+    const rand = rng(seed);
+    c.globalCompositeOperation = 'screen';
+    for (let i = 0; i < count; i++) {
+      const x = area.x + rand() * area.w;
+      const y = area.y + rand() * area.h;
+      const col = colors[i % colors.length];
+      if (i % 3 === 0) {
+        // four-point sparkle
+        const s = 6 + rand() * 12;
+        c.save();
+        c.translate(x, y);
+        c.fillStyle = col;
+        c.globalAlpha = 0.85;
+        c.beginPath();
+        c.moveTo(0, -s);
+        c.quadraticCurveTo(0, 0, s, 0);
+        c.quadraticCurveTo(0, 0, 0, s);
+        c.quadraticCurveTo(0, 0, -s, 0);
+        c.quadraticCurveTo(0, 0, 0, -s);
+        c.fill();
+        c.restore();
+      } else {
+        // soft out-of-focus light orb
+        const r = 8 + rand() * 30;
+        const g = c.createRadialGradient(x, y, 0, x, y, r);
+        g.addColorStop(0, col);
+        g.addColorStop(0.6, col.replace(/[\d.]+\)$/, '0.25)'));
+        g.addColorStop(1, 'rgba(0,0,0,0)');
+        c.fillStyle = g;
+        c.beginPath();
+        c.arc(x, y, r, 0, Math.PI * 2);
+        c.fill();
+      }
+    }
+  });
+}
+
 /** Build a Konva node for one declarative layer. */
 export async function buildLayer(l: Layer, w: number, h: number): Promise<Konva.Node> {
   switch (l.kind) {
@@ -810,6 +890,14 @@ export async function buildLayer(l: Layer, w: number, h: number): Promise<Konva.
       return imageLayer(l);
     case 'grain':
       return grain(w, h, l.opacity);
+    case 'fade':
+      return fade(w, l.y0, l.y1, l.stops);
+    case 'vignette':
+      return vignette(w, h, l.strength, l.color);
+    case 'light-leak':
+      return lightLeak(l.x, l.y, l.r, l.color, l.opacity);
+    case 'bokeh':
+      return bokeh(w, h, l.count, l.colors, l.area, l.seed);
   }
 }
 

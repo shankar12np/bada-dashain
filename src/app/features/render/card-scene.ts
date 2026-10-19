@@ -112,6 +112,9 @@ function tracePath(ctx: CanvasRenderingContext2D | Konva.Context, f: PhotoFrame,
       ctx.closePath();
       break;
     }
+    case 'rect':
+      ctx.rect(x, y, w, h);
+      break;
     case 'rounded':
     default: {
       const r = Math.min(48 + grow, w / 4);
@@ -233,10 +236,10 @@ export class CardScene {
     this.bgLayer.destroyChildren();
     this.bgLayer.add(backgroundGradient(CARD_WIDTH, CARD_HEIGHT, t.palette.bg));
     bgNodes.forEach((n) => n && this.bgLayer.add(n as Konva.Shape));
-    this.bgLayer.add(this.photoHalo(t.photo, t.palette.gold));
+    if (t.photo.halo !== false) this.bgLayer.add(this.photoHalo(t.photo, t.palette.gold));
 
     this.fgLayer.destroyChildren();
-    this.fgLayer.add(this.frameBorder(t.photo));
+    if (t.photo.border.width > 0) this.fgLayer.add(this.frameBorder(t.photo));
     fgNodes.forEach((n) => n && this.fgLayer.add(n as Konva.Shape));
   }
 
