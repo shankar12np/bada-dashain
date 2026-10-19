@@ -88,6 +88,97 @@ const ALL: DayId[] = ['dashain'];
 const EVERY: DayId[] = ['dashain', 'ghatasthapana', 'navaratri', 'fulpati', 'maha-ashtami', 'maha-navami', 'bijaya-dashami', 'kojagrat-purnima'];
 
 export const TEMPLATES: readonly CardTemplate[] = [
+  // ── Bijaya Dashami posters: full-bleed photo + Tika thali + Durga artwork ───
+  // Artwork sits in framed panels in the corners/edges, where a portrait's
+  // background usually is — never over the middle of the photo.
+
+  // B1 ── Dashami Ashirbad: Durga top-left, Tika thali top-right, photo fills the card
+  {
+    id: 'dashami-ashirbad',
+    name: { ne: 'दशमीको आशीर्वाद', en: 'Dashami Ashirbad' },
+    style: 'traditional',
+    days: ['bijaya-dashami'],
+    palette: ROYAL,
+    background: [],
+    photo: { shape: 'rect', cx: 540, cy: 675, width: 1080, height: 1350, border: { color: ROYAL.gold, width: 0 }, halo: false },
+    foreground: [
+      { kind: 'light-leak', x: 540, y: 60, r: 620, color: 'rgba(255,170,60,1)', opacity: 0.4 },
+      { kind: 'vignette', strength: 0.45 },
+      { kind: 'fade', y0: 0, y1: 380, stops: [[0, 'rgba(58,5,10,0.8)'], [1, 'rgba(58,5,10,0)']] },
+      { kind: 'fade', y0: 800, y1: 1350, stops: [[0, 'rgba(50,4,8,0)'], [0.45, 'rgba(50,4,8,0.8)'], [1, 'rgba(38,3,6,0.97)']] },
+      { kind: 'bokeh', count: 34, colors: ['rgba(255,214,120,0.9)', 'rgba(255,170,70,0.8)', 'rgba(255,242,205,0.95)'], area: { x: 280, y: 60, w: 520, h: 230 }, seed: 12 },
+      { kind: 'garland', y: 40, sag: 56, color: '#F59E0B', leaf: '#4D7C0F' },
+      { kind: 'border', inset: 26, color: ROYAL.gold, width: 3, double: true, corners: true },
+      { kind: 'image', src: 'art/durga.jpg', x: 66, y: 94, width: 186, height: 279, frame: { color: ROYAL.gold, width: 8 } },
+      { kind: 'image', src: 'art/thali.jpg', x: 744, y: 140, width: 270, height: 180, fit: 'contain', frame: { color: ROYAL.gold, width: 8 } },
+      { kind: 'jamara', x: 110, y: 1300, width: 120, height: 230, color: '#C3D35A', count: 26 },
+      { kind: 'jamara', x: 970, y: 1300, width: 120, height: 230, color: '#C3D35A', count: 26 },
+    ],
+    text: {
+      greeting: { x: 170, y: 965, width: 740, fontSize: 62, align: 'center', font: 'display', color: '#F7D88B', shadow: true },
+      subline: { x: 190, y: 1105, width: 700, fontSize: 26, align: 'center', font: 'body', color: '#FBF3E4', shadow: true },
+      from: { x: 190, y: 1205, width: 700, fontSize: 32, align: 'center', font: 'script', color: '#F7D88B', shadow: true },
+    },
+  },
+
+  // B2 ── Tika Prasad: photo fills the top, the Tika thali presented below it
+  {
+    id: 'tika-prasad',
+    name: { ne: 'टीका प्रसाद', en: 'Tika Prasad' },
+    style: 'traditional',
+    days: ['bijaya-dashami'],
+    palette: ROYAL,
+    background: [
+      { kind: 'sun-rays', cx: 540, cy: 1100, r: 900, color: ROYAL.gold, opacity: 0.1, count: 40 },
+      { kind: 'pattern-dhaka', y: 1310, height: 40, colors: ['#3F050B', ROYAL.primary, ROYAL.gold, ROYAL.accent] },
+    ],
+    photo: { shape: 'rect', cx: 540, cy: 470, width: 1080, height: 940, border: { color: ROYAL.gold, width: 0 }, halo: false },
+    foreground: [
+      { kind: 'light-leak', x: 1000, y: 90, r: 520, color: 'rgba(255,180,70,1)', opacity: 0.42 },
+      { kind: 'fade', y0: 0, y1: 260, stops: [[0, 'rgba(58,5,10,0.75)'], [1, 'rgba(58,5,10,0)']] },
+      { kind: 'fade', y0: 640, y1: 940, stops: [[0, 'rgba(63,5,11,0)'], [1, 'rgba(63,5,11,1)']] },
+      { kind: 'bokeh', count: 30, colors: ['rgba(255,214,120,0.9)', 'rgba(255,242,205,0.95)'], area: { x: 0, y: 60, w: 1080, h: 220 }, seed: 17 },
+      { kind: 'toran', y: 22, colors: ['#3F6212', '#F59E0B', '#7C2D12'] },
+      { kind: 'border', inset: 26, color: ROYAL.gold, width: 3, double: true, corners: true },
+      { kind: 'image', src: 'art/thali.jpg', x: 60, y: 830, width: 330, height: 330, fit: 'contain', frame: { color: ROYAL.gold, width: 8 } },
+      { kind: 'diyo', x: 225, y: 1240, size: 36, color: '#B45309', flame: '#F59E0B' },
+      { kind: 'marigold', x: 980, y: 1250, r: 30, color: '#F59E0B' },
+    ],
+    text: {
+      greeting: { x: 420, y: 905, width: 610, fontSize: 52, align: 'center', font: 'display', color: ROYAL.text },
+      subline: { x: 430, y: 1045, width: 590, fontSize: 23, align: 'center', font: 'body', color: ROYAL.subtext },
+      from: { x: 430, y: 1185, width: 590, fontSize: 30, align: 'center', font: 'script', color: ROYAL.text },
+    },
+  },
+
+  // B3 ── Durga Kripa: full-bleed photo, a tall Durga panel blessing from the side
+  {
+    id: 'durga-kripa',
+    name: { ne: 'दुर्गा कृपा', en: 'Durga Kripa' },
+    style: 'traditional',
+    days: ['bijaya-dashami'],
+    palette: NIGHT,
+    background: [],
+    photo: { shape: 'rect', cx: 540, cy: 675, width: 1080, height: 1350, border: { color: NIGHT.gold, width: 0 }, halo: false },
+    foreground: [
+      { kind: 'vignette', strength: 0.6, color: '20,4,6' },
+      { kind: 'light-leak', x: 160, y: 1000, r: 520, color: 'rgba(255,150,50,1)', opacity: 0.4 },
+      { kind: 'fade', y0: 760, y1: 1350, stops: [[0, 'rgba(20,4,6,0)'], [0.45, 'rgba(20,4,6,0.82)'], [1, 'rgba(14,3,4,0.97)']] },
+      { kind: 'bokeh', count: 36, colors: ['rgba(255,200,100,0.85)', 'rgba(255,240,200,0.9)'], area: { x: 0, y: 50, w: 1080, h: 280 }, seed: 31 },
+      { kind: 'garland', y: 40, sag: 56, color: '#F59E0B', leaf: '#4D7C0F' },
+      { kind: 'border', inset: 26, color: NIGHT.gold, width: 3, double: true, corners: true },
+      { kind: 'image', src: 'art/durga.jpg', x: 72, y: 860, width: 250, height: 375, frame: { color: NIGHT.gold, width: 9 } },
+      { kind: 'diyo', x: 820, y: 1268, size: 32, color: '#9A3412', flame: '#F59E0B' },
+      { kind: 'diyo', x: 960, y: 1268, size: 32, color: '#9A3412', flame: '#F59E0B' },
+      { kind: 'tika', x: 680, y: 1268, r: 13, color: '#C1121F' },
+    ],
+    text: {
+      greeting: { x: 360, y: 920, width: 670, fontSize: 56, align: 'center', font: 'display', color: '#F7D88B', shadow: true },
+      subline: { x: 370, y: 1060, width: 650, fontSize: 24, align: 'center', font: 'body', color: '#F3E7D3', shadow: true },
+      from: { x: 370, y: 1170, width: 650, fontSize: 30, align: 'center', font: 'script', color: '#F7D88B', shadow: true },
+    },
+  },
+
   // ── Poster designs: the person's photo fills the whole card ─────────────────
   // Festive light, garlands and gold are layered OVER the photo, and the greeting
   // sits on a soft dark fade at the bottom so it always reads clearly.
@@ -598,7 +689,7 @@ export const TEMPLATES: readonly CardTemplate[] = [
 ];
 
 export function getTemplate(id: string): CardTemplate {
-  return TEMPLATES.find((t) => t.id === id) ?? TEMPLATES[0];
+  return TEMPLATES.find((t) => t.id === id) ?? TEMPLATES.find((t) => t.id === 'vijaya-poster')!;
 }
 
 /** Templates for a day — day-specific designs first, then all-festival ones. */
