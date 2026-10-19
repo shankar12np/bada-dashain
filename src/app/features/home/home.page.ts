@@ -5,12 +5,11 @@ import { SeoService } from '../../core/seo/seo.service';
 import { bsYear, currentFestivalDay, getDay } from '../../data/festival-days';
 import { DayIcon } from '../../shared/components/day-icon';
 import { DaySelector } from '../days/day-selector';
-import { RecentCards } from '../gallery/recent-cards';
 import type { TKey } from '../../core/i18n/translations';
 
 @Component({
   selector: 'app-home-page',
-  imports: [RouterLink, DaySelector, DayIcon, RecentCards],
+  imports: [RouterLink, DaySelector, DayIcon],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <!-- Hero -->
@@ -29,7 +28,6 @@ import type { TKey } from '../../core/i18n/translations';
 
         <div class="mt-8 flex flex-wrap gap-3">
           <a [routerLink]="['/create', todayId() ?? 'bijaya-dashami']" class="btn-gold text-lg">{{ i18n.t('home.cta') }} →</a>
-          <a routerLink="/gallery" class="btn border border-gold/50 text-cream hover:bg-sindoor-deep">{{ i18n.t('home.ctaGallery') }}</a>
         </div>
 
         @if (today(); as d) {
@@ -75,18 +73,6 @@ import type { TKey } from '../../core/i18n/translations';
       </div>
     </section>
 
-    <!-- Recent public cards — Firestore only loads when this scrolls into view -->
-    <section class="mx-auto max-w-6xl px-4 py-12">
-      <div class="mb-6 flex items-end justify-between gap-4">
-        <h2 class="heading text-3xl text-sindoor">{{ i18n.t('home.recent') }}</h2>
-        <a routerLink="/gallery" class="text-sm text-sindoor underline-offset-4 hover:underline">{{ i18n.t('nav.gallery') }} →</a>
-      </div>
-      @defer (on viewport) {
-        <app-recent-cards />
-      } @placeholder {
-        <div class="h-64"></div>
-      }
-    </section>
   `,
 })
 export class HomePage implements OnInit {

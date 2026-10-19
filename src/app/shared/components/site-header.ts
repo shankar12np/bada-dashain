@@ -88,7 +88,6 @@ export class SiteHeader {
 
   protected readonly links: { path: string; label: TKey }[] = [
     { path: '/create', label: 'nav.create' },
-    { path: '/gallery', label: 'nav.gallery' },
     { path: '/me', label: 'nav.mine' },
   ];
 

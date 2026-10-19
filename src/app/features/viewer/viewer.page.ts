@@ -42,7 +42,7 @@ import { ShareService } from './share.service';
           </figure>
 
           <div>
-            <a [routerLink]="['/gallery', c.dayId]" class="mb-3 inline-flex items-center gap-2 rounded-full bg-cream px-3 py-1 text-sm">
+            <a [routerLink]="['/create', c.dayId]" class="mb-3 inline-flex items-center gap-2 rounded-full bg-cream px-3 py-1 text-sm">
               <app-day-icon [motif]="day()!.motif" [size]="22" /> {{ i18n.pick(day()!.name) }}
             </a>
             <h1 class="heading text-3xl leading-snug text-sindoor md:text-4xl" [lang]="c.text.lang">{{ c.text.greeting }}</h1>

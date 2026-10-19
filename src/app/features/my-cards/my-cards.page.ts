@@ -7,7 +7,7 @@ import type { TKey } from '../../core/i18n/translations';
 import type { Card } from '../../models/card.model';
 import { CardRepository } from '../cards/card.repository';
 
-/** `/me` — the signed-in user's cards: toggle visibility, delete. */
+/** `/me` — the signed-in user's cards: delete. */
 @Component({
   selector: 'app-my-cards-page',
   imports: [RouterLink],
@@ -37,9 +37,7 @@ import { CardRepository } from '../cards/card.repository';
             <div class="overflow-hidden rounded-xl bg-cream shadow-card" [class.opacity-60]="c.status !== 'active'">
               <a [routerLink]="['/c', c.id]"><img [src]="c.thumbUrl" alt="" loading="lazy" class="aspect-[4/5] w-full object-cover" /></a>
               <div class="flex items-center justify-between gap-2 p-2 text-xs">
-                <button type="button" class="chip px-2.5 py-1 text-xs" (click)="toggle(c)">
-                  {{ i18n.t(c.visibility === 'public' ? 'mine.public' : 'mine.unlisted') }}
-                </button>
+                <span class="text-ink-soft">🔒 {{ i18n.t('mine.unlisted') }}</span>
                 <button type="button" class="text-sindoor hover:underline" (click)="remove(c)">{{ i18n.t('mine.delete') }}</button>
               </div>
             </div>
@@ -84,17 +82,6 @@ export class MyCardsPage {
       this.toast.error(this.i18n.t('error.generic'));
     } finally {
       this.loading.set(false);
-    }
-  }
-
-  protected async toggle(c: Card): Promise<void> {
-    const visibility = c.visibility === 'public' ? 'unlisted' : 'public';
-    this.cards.update((l) => l.map((x) => (x.id === c.id ? { ...x, visibility } : x))); // optimistic
-    try {
-      await this.repo.setVisibility(c.id, visibility);
-    } catch {
-      this.cards.update((l) => l.map((x) => (x.id === c.id ? c : x)));
-      this.toast.error(this.i18n.t('error.generic'));
     }
   }
 

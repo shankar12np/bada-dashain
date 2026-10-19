@@ -77,7 +77,6 @@ export class EditorPage {
   protected readonly text = signal<CardText>({ greeting: '', subline: null, from: null, lang: this.i18n.lang() });
   protected readonly photo = signal<LoadedPhoto | null>(null);
   protected readonly transform = signal<PhotoTransform>(DEFAULT_TRANSFORM);
-  protected readonly isPublic = signal(true);
   protected readonly saving = signal(false);
   protected readonly loadingPhoto = signal(false);
   protected readonly sceneReady = signal(false);
@@ -269,7 +268,7 @@ export class EditorPage {
         dayId: this.day(),
         templateId: this.templateId(),
         text: this.text(),
-        visibility: this.isPublic() ? 'public' : 'unlisted',
+        visibility: 'unlisted', // private: only people with the link can see it
         remixOf: source?.id ?? null,
         rootId: source ? (source.rootId ?? source.id) : null,
         images,

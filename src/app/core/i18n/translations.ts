@@ -9,7 +9,6 @@ export const T = {
   'app.tagline': { ne: 'आशीर्वाद, जुन तपाईं बाँड्न सक्नुहुन्छ', en: 'Dashain blessings, shared from the heart' },
 
   'nav.create': { ne: 'कार्ड बनाउनुहोस्', en: 'Create' },
-  'nav.gallery': { ne: 'ग्यालरी', en: 'Gallery' },
   'nav.mine': { ne: 'मेरा कार्डहरू', en: 'My cards' },
   'nav.lang': { ne: 'English', en: 'नेपाली' },
 
@@ -33,17 +32,15 @@ export const T = {
     en: 'Make a beautiful Dashain card with your family photo and send it to loved ones — in Nepal and around the world.',
   },
   'home.cta': { ne: 'कार्ड बनाउन सुरु गर्नुहोस्', en: 'Start a card' },
-  'home.ctaGallery': { ne: 'अरूका कार्डहरू हेर्नुहोस्', en: 'See cards by others' },
   'home.today': { ne: 'आज', en: 'Today is' },
   'home.chooseDay': { ne: 'कुन दिनको शुभकामना?', en: 'Which day are you celebrating?' },
   'home.how': { ne: 'तीन सजिला चरण', en: 'Three simple steps' },
   'home.step1': { ne: 'दिन र डिजाइन छान्नुहोस्', en: 'Pick a day and a design' },
   'home.step2': { ne: 'फोटो राख्नुहोस्, शुभकामना लेख्नुहोस्', en: 'Add your photo and greeting' },
   'home.step3': { ne: 'साझा गर्नुहोस् — अरूले पनि आफ्नो बनाउन सक्छन्', en: 'Share it — others can make it their own' },
-  'home.recent': { ne: 'भर्खरै बनाइएका कार्डहरू', en: 'Recently shared cards' },
   'home.privacy': {
-    ne: 'तपाईंको मूल फोटो तपाईंकै फोनमा रहन्छ — बनाइएको कार्ड मात्र सेभ हुन्छ।',
-    en: 'Your original photo never leaves your device — only the finished card is saved.',
+    ne: 'तपाईंको मूल फोटो तपाईंकै फोनमा रहन्छ। कार्ड कहीँ सार्वजनिक देखिँदैन — लिङ्क पाउनेले मात्र हेर्छन्, र १५ दिनमा आफैं मेटिन्छ।',
+    en: 'Your original photo never leaves your device. Cards are never shown publicly — only people with the link can see them, and they delete themselves after 15 days.',
   },
 
   'editor.title': { ne: 'कार्ड बनाउनुहोस्', en: 'Make your card' },
@@ -66,8 +63,10 @@ export const T = {
   'editor.fromPlaceholder': { ne: 'जस्तै: शर्मा परिवार', en: 'e.g. The Sharma family' },
   'editor.color': { ne: 'अक्षरको रङ', en: 'Text colour' },
   'editor.position': { ne: 'अक्षरको स्थान', en: 'Text position' },
-  'editor.visibility': { ne: 'सार्वजनिक ग्यालरीमा देखाउने', en: 'Show in public gallery' },
-  'editor.visibilityHint': { ne: 'बन्द गरे लिङ्क भएकाले मात्र हेर्न सक्छन्।', en: 'Off = only people with the link can see it.' },
+  'editor.private': {
+    ne: 'तपाईंको कार्ड निजी रहन्छ — तपाईंले लिङ्क पठाएका मानिसले मात्र हेर्न सक्छन्।',
+    en: 'Your card stays private — only people you send the link to can see it.',
+  },
   'editor.download': { ne: 'डाउनलोड', en: 'Download' },
   'editor.save': { ne: 'सेभ गरी साझा गर्नुहोस्', en: 'Save & share' },
   'editor.saving': { ne: 'सेभ हुँदैछ…', en: 'Saving…' },
@@ -120,14 +119,9 @@ export const T = {
   'report.send': { ne: 'पठाउनुहोस्', en: 'Send report' },
   'report.thanks': { ne: 'धन्यवाद। हामी यसलाई हेर्नेछौँ।', en: 'Thank you. We will review it.' },
 
-  'gallery.title': { ne: 'शुभकामना ग्यालरी', en: 'Greetings gallery' },
-  'gallery.all': { ne: 'सबै', en: 'All' },
-  'gallery.empty': { ne: 'अहिलेसम्म कुनै कार्ड छैन — पहिलो तपाईं बनाउनुहोस्!', en: 'No cards yet — be the first to make one!' },
-  'gallery.more': { ne: 'थप हेर्नुहोस्', en: 'Load more' },
 
   'mine.title': { ne: 'मेरा कार्डहरू', en: 'My cards' },
   'mine.empty': { ne: 'तपाईंले अहिलेसम्म कुनै कार्ड बनाउनुभएको छैन।', en: 'You haven’t made any cards yet.' },
-  'mine.public': { ne: 'सार्वजनिक', en: 'Public' },
   'mine.unlisted': { ne: 'लिङ्क मात्र', en: 'Link only' },
   'mine.delete': { ne: 'मेटाउनुहोस्', en: 'Delete' },
   'mine.confirmDelete': { ne: 'यो कार्ड सधैँका लागि मेटाउने?', en: 'Delete this card permanently?' },

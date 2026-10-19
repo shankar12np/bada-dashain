@@ -55,10 +55,9 @@ service cloud.firestore {
       allow get: if resource.data.status == 'active'
                  || isUser(resource.data.ownerUid);
 
-      // Queries: gallery (public + active) or "my cards" (ownerUid == me).
-      // Firestore requires the query's filters to guarantee these conditions.
-      allow list: if (resource.data.visibility == 'public' && resource.data.status == 'active')
-                  || isUser(resource.data.ownerUid);
+      // Queries: only "my cards" (ownerUid == me). There is no public gallery —
+      // nobody can list other people's cards; a card is seen only via its link.
+      allow list: if isUser(resource.data.ownerUid);
 
       allow create: if isUser(request.resource.data.ownerUid)
         && request.resource.data.keys().hasOnly([
@@ -72,7 +71,7 @@ service cloud.firestore {
         && validDay(request.resource.data.dayId)
         && isStr(request.resource.data.templateId, 2, 40)
         && validText(request.resource.data.text)
-        && request.resource.data.visibility in ['public', 'unlisted']
+        && request.resource.data.visibility == 'unlisted'
         && ownImagePath(request.resource.data.imagePath, request.auth.uid, cardId)
         && isStr(request.resource.data.imageUrl, 10, 600)
         && isStr(request.resource.data.thumbUrl, 10, 600)
@@ -89,10 +88,10 @@ service cloud.firestore {
         && request.resource.data.expireAt > request.time + duration.value(14, 'd')
         && request.resource.data.expireAt < request.time + duration.value(16, 'd');
 
-      // Owner may only change visibility.
+      // Owner may only make an old public card private.
       allow update: if isUser(resource.data.ownerUid)
         && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['visibility'])
-        && request.resource.data.visibility in ['public', 'unlisted'];
+        && request.resource.data.visibility == 'unlisted';
 
       allow delete: if isUser(resource.data.ownerUid);
     }

@@ -47,13 +47,7 @@
           }
         </button>
       </div>
-      <label class="mt-4 flex cursor-pointer items-start gap-3 text-sm">
-        <input type="checkbox" class="mt-1 h-4 w-4 accent-sindoor" [ngModel]="isPublic()" (ngModelChange)="isPublic.set($event)" />
-        <span>
-          {{ i18n.t('editor.visibility') }}
-          <span class="block text-xs text-ink-soft">{{ i18n.t('editor.visibilityHint') }}</span>
-        </span>
-      </label>
+      <p class="mt-4 flex items-start gap-2 text-sm"><span aria-hidden="true">🔒</span> {{ i18n.t('editor.private') }}</p>
       <p class="mt-2 text-xs text-ink-soft">{{ i18n.t('editor.consent') }}</p>
     </div>
 

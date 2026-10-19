@@ -122,18 +122,6 @@ export class CardRepository {
     }
   }
 
-  /** Public gallery page, newest first, optionally filtered by day. */
-  async listPublic(day: DayId | null, cursor: QueryDocumentSnapshot | null = null): Promise<Page> {
-    const c: QueryConstraint[] = [where('visibility', '==', 'public'), where('status', '==', 'active')];
-    if (day) c.push(where('dayId', '==', day));
-    // Only cards still within their lifetime (same field as orderBy → existing indexes still apply).
-    c.push(where('createdAt', '>', Timestamp.fromDate(lifetimeStart())));
-    c.push(orderBy('createdAt', 'desc'));
-    if (cursor) c.push(startAfter(cursor));
-    c.push(limit(PAGE_SIZE));
-    return this.page(query(collection(this.db, 'cards'), ...c));
-  }
-
   async listMine(uid: string, cursor: QueryDocumentSnapshot | null = null): Promise<Page> {
     const c: QueryConstraint[] = [
       where('ownerUid', '==', uid),
@@ -145,9 +133,6 @@ export class CardRepository {
     return this.page(query(collection(this.db, 'cards'), ...c));
   }
 
-  setVisibility(id: string, visibility: CardVisibility): Promise<void> {
-    return updateDoc(doc(this.db, 'cards', id), { visibility });
-  }
 
   /** Delete the doc first (link stops working immediately), then the files. */
   async delete(card: Card): Promise<void> {

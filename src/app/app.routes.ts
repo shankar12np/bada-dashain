@@ -10,8 +10,9 @@ export const routes: Routes = [
   { path: 'create', loadComponent: () => import('./features/days/choose-day.page').then((m) => m.ChooseDayPage) },
   { path: 'create/:dayId', loadComponent: () => import('./features/editor/editor.page').then((m) => m.EditorPage) },
   { path: 'c/:id', loadComponent: () => import('./features/viewer/viewer.page').then((m) => m.ViewerPage) },
-  { path: 'gallery', loadComponent: () => import('./features/gallery/gallery.page').then((m) => m.GalleryPage) },
-  { path: 'gallery/:dayId', loadComponent: () => import('./features/gallery/gallery.page').then((m) => m.GalleryPage) },
+  // No public gallery (privacy) — old gallery links go to the home page.
+  { path: 'gallery', redirectTo: '' },
+  { path: 'gallery/:dayId', redirectTo: '' },
   { path: 'me', loadComponent: () => import('./features/my-cards/my-cards.page').then((m) => m.MyCardsPage) },
   { path: '**', loadComponent: () => import('./features/not-found/not-found.page').then((m) => m.NotFoundPage) },
 ];

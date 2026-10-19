@@ -11,7 +11,7 @@ import { environment } from '../../../environments/environment';
 import { firebaseApp } from './firebase-app';
 
 /**
- * Firestore with an offline, multi-tab IndexedDB cache — the gallery and your
+ * Firestore with an offline, multi-tab IndexedDB cache — your
  * own cards open instantly on repeat visits and work offline in the PWA.
  * Only imported from lazy routes, so it isn't part of the initial bundle.
  */
